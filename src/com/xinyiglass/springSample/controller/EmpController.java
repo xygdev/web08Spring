@@ -81,6 +81,7 @@ public class EmpController {
 		if (!empId.equals(lockEmpVO.getEmpId())){
 			throw new RuntimeException("更新的数据无法匹配!请重新查询!");
 		}
+		
 		EmpVO e = new EmpVO();//复制对象！
 		e = (EmpVO) lockEmpVO.clone();
 		e.setEmpNumber(req.getParameter("EMP_NUMBER"));
