@@ -212,12 +212,12 @@
        </div>
        <a class="close-reveal-modal">&#215;</a>
        <div class="line"></div>
-       <div class="contain" id='configtabs'>
+       <div class="contain" id="configtabs">
          <ul>
-           <li><a href="#config-1">保存配置</a></li>
-           <li><a href="#config-2">加载配置</a></li>
+           <li><a href="#tabs-1">保存配置</a></li>
+           <li><a href="#tabs-2">加载配置</a></li>
          </ul>
-         <div id="config-1" class='tab'>
+         <div id="tabs-1" class='tab'>
            <div class="item" style="text-indent:3rem">
              <label class="pointer" for="USER_INTERACT_NAME">自定义名称：</label>
              <input type="text" name="USER_INTERACT_NAME" id="USER_INTERACT_NAME">
@@ -238,7 +238,7 @@
              <button class='pointer' data-config="save" >保存</button>
            </div>
          </div>
-         <div id="config-2" class='tab'>
+         <div id="tabs-2" class='tab'>
            <div class="item" style="text-indent:6rem;margin:50px auto 60px">
              <label class="pointer" for="loding_format">选择配置:</label>
              <select id="loding_format"></select>
@@ -278,7 +278,7 @@
            <label for='HIRE_DATE' class='left'>雇佣日期</label>
            <input type='text' id='HIRE_DATE' name='HIRE_DATE' class='left'>  
            <label for='JOB_NAME' class='left'>职位</label> 
-           <input type='text' id='JOB_NAME' name='JOB_NAME' class='left short' readonly='readonly'>
+           <input type='text' id='JOB_NAME' name='JOB_NAME' class='left short' >
            <input type='hidden' id='JOB_ID' name='JOB_ID'>
            <input type='button' id='JOB_ID' class='left button pointer' data-reveal-id="lov" data-animation="none" data-bg="lov-modal-bg" data-dismissmodalclass='close-lov' data-lovname="职位查询" data-th=["职务编号","职务名称"] data-td=["JOB_ID","JOB_NAME"] data-selectname=["职务编号","职务名称"] data-selectvalue=["JOB_ID","JOB_NAME"] data-choose=[".JOB_ID",".JOB_NAME"] data-recid=["#JOB_ID","#JOB_NAME"] data-lovsetting='{"defaultquery":true,"queryval":"#lov_query_value","lovclass":".lov_frame","title":".lov_title","querybox":".querybox","contentbox":".contentbox","tablename":"job_query","prevpage":"#lov_prev","nextpage":"#lov_next","query":"#lov_query","pageno":"#lov_page_no","jsontype":"job","queryurl":"lov/getJobPage.do","typetd":"#lov_jsontype","urltd":"#lov_queryurl"}' value="...">
            <label for='DEPT_NAME' class='left'>部门</label>
@@ -317,7 +317,7 @@
            <i class="fa fa-arrow-circle-left pointer" id="lov_prev" aria-hidden="true" data-pagetype="prevpage"  data-pagesetting='{"prevpage":"#lov_prev","nextpage":"#lov_next","pagesize":"#lov_page_size","pageno":"#lov_page_no","tablename":"#job_query","typetd":"#lov_jsontype","urltd":"#lov_queryurl"}'></i>
          </div>
          <!-- <div id="lov_page_no">1</div>  -->
-         <input type="type" id="lov_page_no" class="left" value="1" readonly='readonly'>
+         <input type="text" id="lov_page_no" class="left" value="1" readonly='readonly'>
          <div class="left lov_button">
            <i class="fa fa-arrow-circle-right pointer" id="lov_next" aria-hidden="true" data-pagetype="nextpage"  data-pagesetting='{"prevpage":"#lov_prev","nextpage":"#lov_next","pagesize":"#lov_page_size","pageno":"#lov_page_no","tablename":"#job_query","typetd":"#lov_jsontype","urltd":"#lov_queryurl"}' ></i> 
          </div>                  
@@ -361,7 +361,11 @@
     		$("#HIRE_DATE").datepicker("option", "dateFormat","yy-mm-dd");
     		$("#HIRE_DATE").datepicker("option", "showAnim", "slide" );
     		//设置tab分栏
-    		$( "#configtabs" ).tabs();
+    		$( "#configtabs").tabs();
+    		
+    		$("#JOB_NAME").on("change",function(){
+    		    alert("data changed");
+    		});
   		 });
         
         jQuery.json={
