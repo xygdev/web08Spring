@@ -5,15 +5,18 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import xygdev.commons.entity.PlsqlRetValue;
 import xygdev.commons.page.PagePub;
+import xygdev.commons.springjdbc.DevTransactionPub;
 
 import com.xinyiglass.springSample.dao.EmpVODao;
 import com.xinyiglass.springSample.entity.EmpVO;
 
-@Service @Transactional
+@Service
+@Transactional(rollbackFor=Exception.class)//指定checked的异常Exception也要回滚！
 public class EmpVOService {
 	
 	@Autowired
@@ -22,32 +25,40 @@ public class EmpVOService {
 	PagePub pagePub;
 	
 	public PlsqlRetValue insert(EmpVO e) throws Exception{
-		return eDao.insert(e);
+		PlsqlRetValue ret=eDao.insert(e);
+		if(ret.getRetcode()!=0){
+			DevTransactionPub.setRollbackOnly();//该事务必须要回滚！
+		}
+		return ret;
 	}
+	
 	public PlsqlRetValue delete(Long empId) throws Exception{
-		return eDao.delete(empId);
+		PlsqlRetValue ret=eDao.delete(empId);
+		if(ret.getRetcode()!=0){
+			DevTransactionPub.setRollbackOnly();//该事务必须要回滚！
+		}
+		return ret;
 	}
-	public PlsqlRetValue lock(EmpVO e) throws Exception{
-		return eDao.lock(e);
-	}
-	public PlsqlRetValue update(EmpVO e) throws Exception{
-		return eDao.update(e);
-	}
+	
+	@Transactional(propagation=Propagation.NOT_SUPPORTED,readOnly=true)
 	public int countAll() throws Exception{
 		return eDao.countAll();
 	}
+	
+	@Transactional(propagation=Propagation.NOT_SUPPORTED,readOnly=true)
 	public EmpVO findById(Long empId) throws Exception{
 		return eDao.findById(empId);
 	}
 	
+	@Transactional(propagation=Propagation.NOT_SUPPORTED,readOnly=true)
 	public String findByIdForJson(Long empId) throws Exception{
 		return "{\"rows\":"+eDao.findByIdForResultSet(empId).toJsonStr()+"}";
 	}
 	
+	@Transactional(propagation=Propagation.NOT_SUPPORTED,readOnly=true)
 	public String findForPage(int pageSize,int pageNo,boolean goLastPage,String orderby) throws Exception{
-		String sql="select * from XYG_JBO_CRM_EMP_V A WHERE 1=:1 order by "+orderby;
+		String sql="select * from XYG_JBO_CRM_EMP_V A order by "+orderby;
 		Map<String,Object> paramMap=new HashMap<String,Object>();
-		paramMap.put("1", "1");
 		return pagePub.qPageForJson(sql, paramMap, pageSize, pageNo, goLastPage);
 	}
 	
@@ -56,18 +67,37 @@ public class EmpVOService {
 	   在用户预更新的时候，整笔记录会自动加到session变量里面。这个就是以后更新时候的数据的对比源。
 	   然后，用户在确认更新的时候，再对比预更新的时候的数据和现在的数据库的数据对比，是否有变更。
 	   如果有变更，则提示记录已经被更新，要刷新，确认最新的数据，才允许做更新！
+	   2016.8.12深度测试：
+	   加锁：1个事务如果加锁了(FOR UPDATE NOWAIT)，则另外一个事务会自动等这个事务释放锁才会往下执行。
+	   测试结果：
+	   事务1，加锁，等待30秒。
+	   事务2启动，但是会一直停留卡在lock，没有往下执行。它等待事务1的处理。需要注意的是，貌似程序无法定位到Lock的记录，而是以表来计算的。
+	   事务1，30秒之后，更新完毕。
+	   事务2，lock继续往下执行
+	   事务2，等待30秒，执行完毕。
+	   结论：这个效果还是不错的。虽然没我想的另外一个效果的好(直接报错资源在忙的提示)，但是也不错了。至少锁住了资源，没并发的问题！
+	   ---
+	   经过测试，如果是非LOCK的处理，则直接执行了。不会有任何的等待。
 	*/
 	public PlsqlRetValue update(EmpVO lockEmpVO,EmpVO updateEmpVO) throws Exception
 	{   	
 		//加锁，验证数据是否变更了
-		PlsqlRetValue lockRet=eDao.lock(lockEmpVO);
-		if(lockRet.getRetcode()!=0){
-			return lockRet;
-		}else{
-			return eDao.update(updateEmpVO);
+		//System.out.println("begin lock..");
+		PlsqlRetValue ret=eDao.lock(lockEmpVO);
+		//System.out.println("--LOCK:"+lockEmpVO.getEmpId()+ret.toJsonStr());
+		//Thread.sleep(30000);
+		if(ret.getRetcode()==0){
+			ret=eDao.update(updateEmpVO);
+		}
+		/*PlsqlRetValue ret=eDao.update(updateEmpVO);//更新的会直接跑完了。
+		System.out.println("--UPDATE:"+updateEmpVO.getEmpId()+ret.toJsonStr());
+		Thread.sleep(30000);*/
+		//如果返回值<>0那是必须要回滚的！
+		if(ret.getRetcode()!=0){
+			DevTransactionPub.setRollbackOnly();//该事务必须要回滚！
 		}
 		//Assert.isTrue(lockRet.getRetcode()==0, "lock处理失败！信息："+lockRet.getErrbuf());
-		//return eDao.update(updateEmpVO);
+		return ret;
 	}
 	
 }

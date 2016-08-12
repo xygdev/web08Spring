@@ -47,4 +47,8 @@
     <bean id="EmpVODao" class="com.xinyiglass.springSample.dao.impl.EmpVODaoImpl" parent="abstractDao"/>
     <bean id="PagePub" class="xygdev.commons.page.PagePub" parent="abstractDao"/>
     <bean id="InteractPub" class="xygdev.commons.interact.InteractPub" parent="abstractDao"/>
+    <!-- 配置 事务 -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" parent="abstractDao"/>
+    <!-- 采用@Transactional注解方式使用事务  -->
+	<tx:annotation-driven transaction-manager="txManager"/>
 </beans>
