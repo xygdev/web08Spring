@@ -7,13 +7,13 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <base href="<%=basePath%>">  
     <title>分页查询</title>
+    <base href="<%=basePath%>"> 
     <meta http-equiv="content-type" content="text/html;charset=gb2312">
 	<link rel="stylesheet" href="plugin/css/font-awesome.min.css">
 	<link rel="stylesheet" href="plugin/css/jquery-ui.min.css">
 	<link rel="stylesheet" type="text/css" href="plugin/css/style.css">
-	<script type="text/javascript" src="plugin/jQuery/jQuery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="plugin/jQuery/jQuery-2.1.4.min.js"></script>	
 	<script src="plugin/js/jquery-ui.min.js"></script>
   </head> 
   <body>
@@ -344,8 +344,7 @@
      <!-- hidden属性存放区域 end -->  
    </div>
      
-    <script>
-        
+    <script>       
          $(function() {
             //设置拖拽
     		$("#uf").draggable();
@@ -361,8 +360,18 @@
     		$("#HIRE_DATE").datepicker("option", "dateFormat","yy-mm-dd");
     		$("#HIRE_DATE").datepicker("option", "showAnim", "slide" );
     		//设置tab分栏
+    		/**屏蔽<base>标签对JQuery UI tabs()的影响**/
+    		$.fn.__tabs = $.fn.tabs;
+			$.fn.tabs = function (a, b, c, d, e, f) {
+				var base = window.location.href.replace(/#.*$/, '');
+				$('ul>li>a[href^="#"]', this).each(function () {
+					var href = $(this).attr('href');
+					$(this).attr('href', base + href);
+				});
+				$(this).__tabs(a, b, c, d, e, f);
+			};
     		$( "#configtabs").tabs();
-    		
+    		/****/
     		$("#JOB_NAME").on("change",function(){
     		    alert("data changed");
     		});
