@@ -76,7 +76,6 @@
 				}
 				orderby=$('#ORDER_BY').val();
 				param=param+'&orderby='+orderby;
-				//alert("param:"+param);
 				$.ajax({
 					async:true,
 					type:'post', 

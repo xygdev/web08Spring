@@ -20,7 +20,8 @@ public class LovService {
 
 	@Autowired
 	PagePub pagePub;
-
+	
+	
 	public String findJobForPage(int pageSize,int pageNo,boolean goLastPage,Long jobId,String jobName) throws Exception{
 		StringBuffer sqlBuf=new StringBuffer();
 		Map<String,Object> paramMap=new HashMap<String,Object>();
@@ -44,5 +45,4 @@ public class LovService {
 		sqlBuf.append(" ORDER BY 1 ");
 		return pagePub.qPageForJson(sqlBuf.toString(), paramMap, pageSize, pageNo, goLastPage);
 	}
-	
 }

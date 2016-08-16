@@ -2,12 +2,17 @@
                     jQuery 页面弹出框功能
                     Create Date:2015.1.20
                     Create By:bird
-                    Last Update Date:2016.7.13
+                    Last Update Date:2016.8.16
                     Last Update By:bird
                           修改日志
            2015.1.20   创建文件
            2016.5.10   新增Lov取值函数
            2016.7.13   代码优化，并新增插件配置说明
+           2016.8.16   新增LOV框输入值验证功能，新增on change事件，
+                       监听对LOV框值得手动修改结果，AJAX传递到后台验证是否存在，
+                       若存在，则匹配相应ID值并存放到相应的hidden框内，
+                       若不存在，则清空LOV的text框并提醒用户使用LOV选择
+                       或重新手动输入
 *********************************************************/
 (function($) {	
 	/******************listener start***********************
@@ -18,11 +23,14 @@
 	 *******************************************************/
 	$.fn.lovListener = function(){ 
 		/****绑定<input>标签****/
-		$('input[data-lovname]').on('click', function(e) {		
+		$('input[data-lovname]').on('click', function() {		
 			$(this).lov($(this).data());
 		});
+		$('input[data-modify]').on('change', function() {		
+			$(this).modify($(this).data());
+		});
 		/****绑定<button>标签****/
-		$('button[data-lovname]').on('click', function(e) {
+		$('button[data-lovname]').on('click', function() {
 			$(this).lov($(this).data());
 		});
 		/****绑定<a>标签****/
@@ -31,16 +39,16 @@
 			$(this).lov($(this).data());
 		});
 		/****绑定<i>标签****/
-		$('i[data-lovname]').on('click', function(e) {
+		$('i[data-lovname]').on('click', function() {
 			$(this).lov($(this).data());
-		});				
+		});	
 	}   
 	/******************listener end***********************/	
 	
 	/****执行监听函数****/
 	$().lovListener();
 	
-	
+	/***lov***/
     $.fn.lov = function(options) {	
         /**************************
         		设置默认属性
@@ -108,6 +116,78 @@
       	    $(options.lovsetting.lovclass).css('margin-left',width);   
         });    	
     }
+    
+    /***modify***/
+    $.fn.modify = function(options) {
+    	/**************************
+		         设置默认属性
+    	**************************/	    
+    	var defaults={
+    		validurl:'',//验证LOV框输入值的url
+    		queryurl:'',//匹配ID的url
+    		lovbtn:'',//LOV按钮的ID
+    		hiddenid:'',//隐藏的ID值得input框ID
+    		queryparam:''//查询条件名称
+    	} 
+    	
+    	/****继承默认属性****/
+    	var options = $.extend({}, defaults, options); 
+    	
+    	return this.each(function() { 
+    		if(options.modify==true){
+    			input=$(this);
+    			param=$(this).val();
+    			param=options.queryparam+'='+param;
+    			$.ajax({
+					type:'post', 
+					data:param,
+					url:options.validurl,
+					dataType:'json',
+					success: function (data) {
+						if(data.EXISTS=='Y'){
+							if(data.rows.COUNT==0){
+								input.val('');
+								result=confirm("输入的值不存在，是否通过值列表选取");	
+								if(result==true){
+									$('#'+options.lovbtn).click();
+								}else{
+									return;
+								}					
+							}else if(data.rows.COUNT==1){
+								$.ajax({
+									type:'post', 
+									data:param,
+									url:options.queryurl,
+									dataType:'json',
+									success: function (data) {
+										if(data.EXISTS=='Y'){
+											$('#'+options.hiddenid).val(data.rows.ID);
+										}else{
+											alert('返回数据为空，请联系IT部门人员');
+										}
+									},
+									error: function () {
+										alert("获取Json数据失败");
+									}
+								});
+								return;
+							}else{
+								alert('程序错误，返回值不能为0或1之外的值');
+							}
+						}else{
+							alert('返回数据为空，请联系IT部门人员');
+						}
+					},
+					error: function () {
+						alert("获取Json数据失败");
+					}
+				});     					
+    		}else{
+    			return;
+    		}
+    	});   
+    }
+    
 })(jQuery);
 
 

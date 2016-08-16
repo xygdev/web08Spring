@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import xygdev.commons.util.TypeConvert;
 
 import com.xinyiglass.springSample.service.LovService;
+import com.xinyiglass.springSample.service.LovValidService;
 
 @Controller
 @RequestMapping("/lov")
@@ -22,6 +23,7 @@ public class LovController {
 	
 	@Autowired
 	LovService lovService;
+	LovValidService lVS;
 	
 	protected HttpServletRequest req; 
     protected HttpServletResponse res; 

@@ -22,6 +22,10 @@
 		   2016.5.11   代码调优，由300行代码减少至150行
 		   2016.7.12   代码优化，并新增插件配置说明
 		   2016.8.11   整合Spring框架进行的小修改 by sam.t
+		   2016.8.16   新增global函数，validate(),
+		               验证更新框中的所有required的input框的值，返回一个boolean值validateFlag
+		               点击更新按钮时，验证validateFlag,如果为true,则可以更新
+		               如果为false,则存在值为空的必填项
 ***************************************************************************************/
 (function($) {
 	/******************listener start***********************
@@ -101,7 +105,24 @@
            			$(options.crudsetting.lastpage).css('display','');
            			$(options.crudsetting.nextpage).css('display','');
            		}
+           	},
+           	validate:function(){
+           		var input=$(options.crudsetting.tablename+' input[required="required"]');
+           		validate_flag=true;
+				for(i=0;i<input.length;i++){
+					if(input[i].value==''||input[i].value==null){
+						id=input[i].id;
+						label=$(options.crudsetting.tablename+' label[for="'+id+'"]').text();
+						alert('提交失败!错误信息:'+label+'不能为空！');
+						input[i].focus();
+						validate_flag=false;
+						return;
+					}else{
+						continue;
+					}
+				}
            	}
+            
         }
         	
         return this.each(function() {       	
@@ -154,7 +175,10 @@
 				});			
 			}
 			/******更新方法******/
-			else if(options.crudtype=='update'){
+			else if(options.crudtype=='update'){ 
+				jQuery.global.validate();
+				if(validate_flag==true){
+				/****************************/
 				jQuery.json.setUpdateParam();
 				pageSize=parseInt($(options.crudsetting.pagesize).val());
 				pageNo=parseInt($(options.crudsetting.pageno).val());
@@ -176,7 +200,11 @@
 					error: function () {
 						alert("获取数据失败");
 					}			
-				});		
+				});	
+				/*****************************************/
+				}else{
+					return;
+				}
 			}
 			/******条件查询方法******/
 			else if(options.crudtype=='query'){

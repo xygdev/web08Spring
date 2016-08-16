@@ -45,6 +45,7 @@
     <bean id="EmpVO" class="com.xinyiglass.springSample.entity.EmpVO"/>
     <!-- 配置 DAO -->
     <bean id="EmpVODao" class="com.xinyiglass.springSample.dao.impl.EmpVODaoImpl" parent="abstractDao"/>
+    <bean id="LovDao" class="com.xinyiglass.springSample.dao.impl.LovDaoImpl" parent="abstractDao"/>
     <bean id="PagePub" class="xygdev.commons.page.PagePub" parent="abstractDao"/>
     <bean id="InteractPub" class="xygdev.commons.interact.InteractPub" parent="abstractDao"/>
     <!-- 配置 事务 -->
