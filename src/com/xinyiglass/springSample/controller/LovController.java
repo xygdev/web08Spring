@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import xygdev.commons.util.TypeConvert;
 
 import com.xinyiglass.springSample.service.LovService;
-import com.xinyiglass.springSample.service.LovValidService;
 
 @Controller
 @RequestMapping("/lov")
@@ -23,7 +22,6 @@ public class LovController {
 	
 	@Autowired
 	LovService lovService;
-	LovValidService lVS;
 	
 	protected HttpServletRequest req; 
     protected HttpServletResponse res; 
@@ -64,5 +62,42 @@ public class LovController {
 		String managerName=req.getParameter("MANAGER_NAME");
 		res.getWriter().print(lovService.findDeptForPage(pageSize, pageNo, goLastPage, deptName, deptTypeDesc, managerName));
 	}
+	
+    //JOB值列表值验证
+    @RequestMapping(value = "/validJobName.do", method = RequestMethod.GET)
+    public void validJobName() throws Exception
+    {	
+    	String jobName=req.getParameter("jobname");
+    	System.out.println(jobName);
+    	res.getWriter().print(lovService.countByJobName(jobName));
+    }
+    
+    //通过JOB_NAME获取JOB_ID
+    //http://localhost:8080/web08Spring/lov/getJobId.do?jobname=123
+    @RequestMapping(value = "/getJobId.do", method = RequestMethod.GET)
+    public void getJobId() throws Exception
+    {	
+    	String jobName=req.getParameter("jobname");
+    	System.out.println(jobName);
+    	res.getWriter().print(lovService.findForJobId(jobName));
+    }
+    
+    //DEPT值列表值验证
+    @RequestMapping(value = "/validDeptName.do", method = RequestMethod.POST)
+    public void validDeptName() throws Exception
+    {	
+    	String deptName=req.getParameter("deptname");
+    	System.out.println(deptName);
+    	res.getWriter().print(lovService.countByDeptName(deptName));
+    }
+    
+    //通过DEPT_NAME获取DEPT_ID
+    @RequestMapping(value = "/getDeptId.do", method = RequestMethod.POST)
+    public void getDeptId() throws Exception
+    {	
+    	String deptName=req.getParameter("deptname");
+    	System.out.println(deptName);
+    	res.getWriter().print(lovService.findForDeptId(deptName));
+    }
 	
 }

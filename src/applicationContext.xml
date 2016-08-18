@@ -15,13 +15,13 @@
             http://www.springframework.org/schema/tx 
             http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
             
-            
     <context:property-placeholder location="classpath:jdbc.properties" />
     
     <context:component-scan base-package="com.xinyiglass.springSample">
     	<!-- 防止SpringMVC和SpringIOC对同一个对象的管理重合 -->
     	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     	<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    	<context:exclude-filter type="regex" expression="com.xinyiglass.springSample.websocket.*"/>
     </context:component-scan>
     
     <!-- 配置数据库连接池 Bean -->    
@@ -45,7 +45,6 @@
     <bean id="EmpVO" class="com.xinyiglass.springSample.entity.EmpVO"/>
     <!-- 配置 DAO -->
     <bean id="EmpVODao" class="com.xinyiglass.springSample.dao.impl.EmpVODaoImpl" parent="abstractDao"/>
-    <bean id="LovDao" class="com.xinyiglass.springSample.dao.impl.LovDaoImpl" parent="abstractDao"/>
     <bean id="PagePub" class="xygdev.commons.page.PagePub" parent="abstractDao"/>
     <bean id="InteractPub" class="xygdev.commons.interact.InteractPub" parent="abstractDao"/>
     <!-- 配置 事务 -->

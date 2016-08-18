@@ -42,6 +42,11 @@ public class EmpController {
 	public String listEmpVO(){
 		return "listEmpVO";
 	}
+	
+	@RequestMapping("/webSocket.do")
+	public String webSocket(){
+		return "webSocket";
+	}
 
 	@RequestMapping(value = "/getEmpPage.do", method = RequestMethod.POST)
 	public void getEmpPage() throws Exception
