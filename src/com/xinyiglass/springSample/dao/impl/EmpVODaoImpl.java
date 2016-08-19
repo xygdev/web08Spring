@@ -48,9 +48,12 @@ public class EmpVODaoImpl extends DevJdbcDaoSupport implements EmpVODao {
                 + " ,:16"//,P_DISABLED_DATE IN DATE DEFAULT NULL
                 + " ,:17"//,P_REMARK IN   VARCHAR2 DEFAULT NULL
 				+ " ); "
+				+ "exception "
+				+ "when others then "
+				+ ":18:=sqlerrm; "
 				+ "end;";
 		Map<String,Object> paramMap=new HashMap<String,Object>();
-		paramMap.put("1", e.getEmpId());
+		paramMap.put("1", 0L);
 		paramMap.put("2", e.getEmpNumber());
 		paramMap.put("3", e.getFirstName());
 		paramMap.put("4", e.getLastName());
@@ -69,8 +72,10 @@ public class EmpVODaoImpl extends DevJdbcDaoSupport implements EmpVODao {
 		paramMap.put("17", e.getRemark());
 		Map<String,Integer> outParamMap=new HashMap<String,Integer>();
 		outParamMap.put("1", Types.BIGINT);//定义输出参数
+		outParamMap.put("18", Types.VARCHAR);
 		Map<String,Object> outValueMap=this.getDevJdbcTemplate().execute(sql, paramMap, outParamMap);
 		Long empId = (Long) outValueMap.get("1");
+		String sqlErrm = (String) outValueMap.get("18");
 		//PlsqlRetValue prv=this.getDevJdbcTemplate().executeForPrv(sql, paramMap);
 		//Long empId = Long.parseLong(prv.getParam1());
 		log("INSERT Emp ID:"+empId);
@@ -78,7 +83,7 @@ public class EmpVODaoImpl extends DevJdbcDaoSupport implements EmpVODao {
 		PlsqlRetValue ret=new PlsqlRetValue();
 		if(empId==null){
 			ret.setRetcode(2);
-			ret.setErrbuf("新增记录失败!");
+			ret.setErrbuf("新增记录失败!错误信息:"+sqlErrm);
 		}else{
 			ret.setRetcode(0);
 			ret.setErrbuf("新增记录成功！Emp ID为:"+empId);
@@ -242,11 +247,12 @@ public class EmpVODaoImpl extends DevJdbcDaoSupport implements EmpVODao {
 			EmpVO e=eDao.findById(1080L);
 			System.out.println("QUERY:"+e);
 			//e.setEmpId(eDao.getEmpIdNextSeq());
-			e.setEmpNumber("");
+			e.setEmpId(0L);
+			e.setEmpNumber("111122");
 			e.setFirstName("firstName");
 			e.setLastName("lastName");
 			//long newEmpId=eDao.insert(e);
-			//System.out.println("INSERT:"+e);
+			System.out.println("INSERT:"+eDao.insert(e));
 			//eDao.delete(newEmpId);
 		} catch (Exception e) {
 			e.printStackTrace();

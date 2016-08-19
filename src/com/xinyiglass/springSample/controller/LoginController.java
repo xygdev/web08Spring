@@ -40,16 +40,23 @@ public class LoginController {
 		return "login";
 	}
 	
-	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public ModelAndView postLogin(String nickname){
+	@RequestMapping(value="/login.do",method=RequestMethod.POST)
+	public ModelAndView postLogin(String USER_ID){
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("index");
-		mv.addObject("nickname",nickname);
+		mv.setViewName("listEmpVO");
+		mv.addObject("USER_ID",USER_ID);
+		sess.setAttribute("USER_ID", Long.parseLong(USER_ID));//设定用户ID到会话
 		return mv;
 	}
 
-	@RequestMapping(value="/login",method=RequestMethod.GET)
+	@RequestMapping(value="/login.do",method=RequestMethod.GET)
 	public String getLogin(){
+		return "redirect:/";
+	}
+
+	@RequestMapping(value="/logout.do",method=RequestMethod.GET)
+	public String getLogout(){
+		sess.setAttribute("USER_ID", null);
 		return "redirect:/";
 	}
 	

@@ -40,12 +40,11 @@ public class EmpController {
     
 	@RequestMapping("/listEmpVO.do")
 	public String listEmpVO(){
-		return "listEmpVO";
-	}
-	
-	@RequestMapping("/webSocket.do")
-	public String webSocket(){
-		return "webSocket";
+		if(sess.getAttribute("USER_ID")!=null&&sess.getAttribute("USER_ID").toString().length()>0){
+			return "listEmpVO";
+		}else{
+			return "redirect:/";
+		}
 	}
 
 	@RequestMapping(value = "/getEmpPage.do", method = RequestMethod.POST)
