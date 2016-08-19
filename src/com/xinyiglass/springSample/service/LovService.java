@@ -64,6 +64,7 @@ public class LovService {
 		String sql = "SELECT COUNT(*) COUNT FROM XYG_JBO_CRM_JOB WHERE JOB_NAME=:1 AND DISABLED_DATE IS NULL";
 		Map<String,Object> paramMap=new  HashMap<String,Object>();
 		paramMap.put("1", jobName);
+		System.out.println("{\"rows\":"+pagePub.getDevJdbcTemplate().queryForResultSet(sql, paramMap).toJsonStr()+"}");
 		return "{\"rows\":"+pagePub.getDevJdbcTemplate().queryForResultSet(sql, paramMap).toJsonStr()+"}";
 	}
 	
