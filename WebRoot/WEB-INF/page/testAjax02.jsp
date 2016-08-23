@@ -37,7 +37,10 @@ function check_username(){
 		}
 	}
 	$('username_msg').innerHTML="正在验证...";//模拟用户量大的情况。
+	alert("1");
 	xhr.send('username='+$F('username'));
+	//如果是同步请求，浏览器不会执行以下的代码，而是等待服务器响应回来，在此期间，浏览器会锁定当前页面
+	alert("2");//上面的参数决定了这个代码的执行顺序。
 }
 </script>
 </head>
