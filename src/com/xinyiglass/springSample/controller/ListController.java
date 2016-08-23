@@ -37,9 +37,21 @@ public class ListController {
 
     //http://localhost:8080/web08Spring/list/getSex.do
 	@RequestMapping(value = "/getSex.do", method = RequestMethod.POST)
-	public void getJobPage() throws Exception
-	{   	
+	public void getSex() throws Exception
+	{
 		res.getWriter().print(listService.findForSex());
+	}
+	
+	@RequestMapping(value = "/getCurtainType.do", method = RequestMethod.POST)
+	public void getCurtainType() throws Exception
+	{
+		res.getWriter().print(listService.findForCurtainType());
+	}
+
+	@RequestMapping(value = "/getProjectStatus.do", method = RequestMethod.POST)
+	public void getProjectStatus() throws Exception
+	{
+		res.getWriter().print(listService.findForProjectStatus());
 	}
 	
 }

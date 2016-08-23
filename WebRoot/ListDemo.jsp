@@ -14,8 +14,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
     <select id='1' data-listurl="list/getSex.do"></select>&nbsp;  
-    <select id='2' data-listurl="list/getSex.do"></select>&nbsp;
-    <select id='3' data-listurl="list/getSex.do"></select>&nbsp; 
+    <select id='2' data-listurl="list/getCurtainType.do"></select>&nbsp;
+    <select id='3' data-listurl="list/getProjectStatus.do"></select>&nbsp; 
     <select id='4' data-listurl="list/getSex.do"></select>&nbsp;   
     <select id='5' data-listurl="list/getSex.do"></select>&nbsp;    
     <select id='6' data-listurl="list/getSex.do"></select>&nbsp;   
