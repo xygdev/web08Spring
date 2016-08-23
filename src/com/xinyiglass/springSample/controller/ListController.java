@@ -36,7 +36,7 @@ public class ListController {
     } 
 
     //http://localhost:8080/web08Spring/list/getSex.do
-	@RequestMapping(value = "/getSex.do", method = RequestMethod.GET)
+	@RequestMapping("/getSex.do")
 	public void getJobPage() throws Exception
 	{   	
 		res.getWriter().print(listService.findForSex());
