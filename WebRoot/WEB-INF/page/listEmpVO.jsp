@@ -68,7 +68,7 @@
          <i class="fa fa-cog pointer" data-reveal-id="setting" data-dismissmodalclass="close-setting"></i>
        </div>
        <div class="setting">
-         <i class="fa fa-user-plus pointer" data-reveal-id="uf" data-dismissmodalclass="close-update-frame" data-crudtype="pre-insert" data-type="insert"></i>
+         <i class="fa fa-user-plus pointer" data-reveal-id="uf" data-dismissmodalclass="close-update-frame" data-crudtype="pre-insert" data-type="insert" ></i>
        </div>
        <div class="setting">
          <i id='refresh' class="fa fa-refresh pointer" data-pagetype='refresh' data-pageframe="table"></i>
@@ -282,10 +282,8 @@
            <label for='FIRST_NAME' class='left'>名</label>
            <input type='text' id='FIRST_NAME' data-name="FIRST_NAME" name='FIRST_NAME' data-update="db" required='required' class='left'>
            <label for='SEX' class='left'>性别</label>
-           <select class='left' id='SEX' name='SEX' data-update="db" required='required'>
-             <option value='M'>男</option>
-             <option value='F'>女</option>
-             <option value='U'>不明</option>
+           <select class='left' id='SEX' name='SEX' data-update="db" required='required' data-listurl="list/getSex.do">
+
            </select>       
            <label for='PHONE_NUMBER' class='left'>电话</label>
            <input type='text' id='PHONE_NUMBER' name='PHONE_NUMBER' data-update="db" required='required' class='left'>
