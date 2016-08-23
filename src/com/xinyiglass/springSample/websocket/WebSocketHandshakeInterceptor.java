@@ -22,10 +22,11 @@ public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
     public boolean beforeHandshake(ServerHttpRequest request,  
             ServerHttpResponse response, WebSocketHandler wsHandler,  
             Map<String, Object> attributes) throws Exception {
+		System.out.println("beforeHandshake");
 		if(request instanceof ServletServerHttpRequest){
 			ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
             HttpSession session = servletRequest.getServletRequest().getSession(false);
-            System.out.println("beforeHandshake,session id:"+session.getId());
+            System.out.println("session:"+session);
             if (session != null) {
                 //使用USER_ID区分WebSocketHandler，以便定向发送消息
             	if(session.getAttribute("USER_ID")!=null){
