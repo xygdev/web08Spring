@@ -64,7 +64,7 @@ public class LovController {
 	}
 	
     //JOB值列表值验证
-    @RequestMapping(value = "/validJobName.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/validJobName.do", method = RequestMethod.POST)
     public void validJobName() throws Exception
     {	
     	String jobName=req.getParameter("jobname");
@@ -74,7 +74,7 @@ public class LovController {
     
     //通过JOB_NAME获取JOB_ID
     //http://localhost:8080/web08Spring/lov/getJobId.do?jobname=123
-    @RequestMapping(value = "/getJobId.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/getJobId.do", method = RequestMethod.POST)
     public void getJobId() throws Exception
     {	
     	String jobName=req.getParameter("jobname");

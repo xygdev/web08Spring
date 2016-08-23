@@ -64,27 +64,28 @@ public class LovService {
 		String sql = "SELECT COUNT(*) COUNT FROM XYG_JBO_CRM_JOB WHERE JOB_NAME=:1 AND DISABLED_DATE IS NULL";
 		Map<String,Object> paramMap=new  HashMap<String,Object>();
 		paramMap.put("1", jobName);
-		return "{\"rows\":"+pagePub.getDevJdbcTemplate().queryForResultSet(sql, paramMap).toJsonStr()+"}";
+		System.out.println("{\"rows\":"+pagePub.getDevJdbcTemplate().queryForResultSet(sql, paramMap).toJsonStr()+"}");
+		return pagePub.qSqlForJson(sql, paramMap);
 	}
 	
 	public String findForJobId(String jobName) throws Exception{
 		String sql = "SELECT JOB_ID FROM XYG_JBO_CRM_JOB WHERE JOB_NAME=:1 AND DISABLED_DATE IS NULL";
 		Map<String,Object> paramMap=new  HashMap<String,Object>();
 		paramMap.put("1", jobName);
-		return "{\"rows\":"+pagePub.getDevJdbcTemplate().queryForResultSet(sql, paramMap).toJsonStr()+"}";
+		return pagePub.qSqlForJson(sql, paramMap);
 	}
 	
 	public String countByDeptName(String deptName) throws Exception{
 		String sql = "SELECT COUNT(*) COUNT FROM XYG_JBO_CRM_DEPT WHERE DEPT_NAME=:1 AND DISABLED_DATE IS NULL";
 		Map<String,Object> paramMap=new  HashMap<String,Object>();
 		paramMap.put("1", deptName);
-		return "{\"rows\":"+pagePub.getDevJdbcTemplate().queryForResultSet(sql, paramMap).toJsonStr()+"}";
+		return pagePub.qSqlForJson(sql, paramMap);
 	}
 	
 	public String findForDeptId(String deptName) throws Exception{
 		String sql = "SELECT DEPT_ID FROM XYG_JBO_CRM_DEPT WHERE DEPT_NAME=:1 AND DISABLED_DATE IS NULL";
 		Map<String,Object> paramMap=new  HashMap<String,Object>();
 		paramMap.put("1", deptName);
-		return "{\"rows\":"+pagePub.getDevJdbcTemplate().queryForResultSet(sql, paramMap).toJsonStr()+"}";
+		return pagePub.qSqlForJson(sql, paramMap);
 	}
 }
