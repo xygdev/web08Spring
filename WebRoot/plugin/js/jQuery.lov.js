@@ -13,6 +13,7 @@
                        若存在，则匹配相应ID值并存放到相应的hidden框内，
                        若不存在，则清空LOV的text框并提醒用户使用LOV选择
                        或重新手动输入
+           2016.8.22   代码重构，减少配置参数
 *********************************************************/
 (function($) {	
 	/******************listener start***********************
@@ -187,6 +188,70 @@
     		}
     	});   
     }
+    
+    /***list***/
+    var select=$('select[data-listurl]');
+    console.log(select);
+    //返回的select为DOM对象，使用原生JS对其进行操作
+    for(m=0;m<select.length;m++){
+    	list=document.getElementById(select[m].id);
+    	//var url=select[i].attributes['data-listurl'].value;
+    	$.ajax({
+			type:'post', 
+			url:select[m].attributes['data-listurl'].value,
+			async: false,
+			dataType:'json',
+			success: function (data) {
+				console.log(m);
+				if(data.rows!=null){
+					for(n=0;n<data.rows.length;n++){					
+						option=document.createElement('option');
+						text=document.createTextNode(data.rows[n].DISPLAY);
+						option.value=data.rows[n].VALUE;
+						option.appendChild(text);
+						list.appendChild(option);
+					}
+				}else{
+					alert('返回数据为空，请联系IT部门人员');
+				}
+			},
+			error: function () {
+				alert("获取Json数据失败");
+			}
+		});
+    }
+    /*
+    $.fn.list = function(options) {   
+    	var defaults={
+             pageframe:''
+    	} 
+    	
+    	var options = $.extend({}, defaults, options);
+    	
+    	return this.each(function() {
+    		select=$('select',$('#'+options.pageframe+' form'));
+    		$.ajax({
+				type:'post', 
+				data:param,
+				url:options.listurl,
+				dataType:'json',
+				success: function (data) {
+					if(data.rows!=null){
+						for(i=0;i<data.rows.length;i++){
+							$(select).append('<option value="'+data.rows[i].VALUE+'">'+data.rows[i].DISPLAY+'</option>');
+						}
+					}else{
+						alert('返回数据为空，请联系IT部门人员');
+					}
+				},
+				error: function () {
+					alert("获取Json数据失败");
+				}
+    		});
+    	});
+    }
+    */
+    
     
 })(jQuery);
 

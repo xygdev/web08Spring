@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xinyiglass.springSample.service.ListService;
 
@@ -35,10 +36,22 @@ public class ListController {
     } 
 
     //http://localhost:8080/web08Spring/list/getSex.do
-	@RequestMapping("/getSex.do")
-	public void getJobPage() throws Exception
-	{   	
+	@RequestMapping(value = "/getSex.do", method = RequestMethod.POST)
+	public void getSex() throws Exception
+	{
 		res.getWriter().print(listService.findForSex());
+	}
+	
+	@RequestMapping(value = "/getCurtainType.do", method = RequestMethod.POST)
+	public void getCurtainType() throws Exception
+	{
+		res.getWriter().print(listService.findForCurtainType());
+	}
+
+	@RequestMapping(value = "/getProjectStatus.do", method = RequestMethod.POST)
+	public void getProjectStatus() throws Exception
+	{
+		res.getWriter().print(listService.findForProjectStatus());
 	}
 	
 }
