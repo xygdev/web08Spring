@@ -54,15 +54,16 @@
         		设置默认属性
 		**************************/	    
     	var defaults={
-    		lovsetting:'{"defaultquery":"","queryval":"","lovclass":"","title":"","querybox":"","contentbox":"","tablename":"","prevpage":"","nextpage":"","query":"","pageno":"","queryurl":"","jsontype":"","typetd":"","urltd":""}'
+    		defaultquery:false
     	} 
     	/****继承默认属性****/
         var options = $.extend({}, defaults, options); 
+    	var tablename=$('#'+options.pageframe).attr('data-table');
     	
         return this.each(function() {  
         	/****Lov取值函数，将Lov表格中的值选入预更新框并关闭lov框****/        	        	
         	$.fn.choose = function(){
-            	$(options.lovsetting.lovclass+' td').on('click', function() {
+            	$('table[data-table="'+tablename+'"] td').on('click', function() {
             		for(k=0;k<2;k++){
             			text=$(this).parent().children(options.choose[k]).text();
             			if(!text){
@@ -72,48 +73,47 @@
             				$(options.recid[k]).val(text);
             			}   			
             		}
-            		$(options.lovsetting.lovclass+' .'+options.dismissmodalclass).click();
+            		$('#'+options.pageframe+' .'+options.dismissmodalclass).click();
             	});
         	}       	
-        	$(options.lovsetting.title+' h1').text(options.lovname);
-        	$(options.lovsetting.pageno).val('1');
-        	$(options.lovsetting.prevpage).css('display','none');
-        	$(options.lovsetting.nextpage).css('display','none');
-        	$(options.lovsetting.typetd).val(options.lovsetting.jsontype);
-        	$(options.lovsetting.urltd).val(options.lovsetting.queryurl);
-        	$('table',$(options.lovsetting.lovclass+' '+options.lovsetting.contentbox)).html('');       	
-        	$('table',$(options.lovsetting.lovclass+' '+options.lovsetting.contentbox)).append('<tr>');
+        	$('#'+options.pageframe+' input[data-type="title"]').text(options.lovname);
+        	$('#'+options.pageframe+' input[data-type="number"]').val('1');
+        	$('#'+options.pageframe+' i[data-pagetype="prevpage"]').css('display','none');
+        	$('#'+options.pageframe+' i[data-pagetype="nextpage"]').css('display','none');
+        	$('#'+options.pageframe+' input[data-type="jsontype"]').val(options.jsontype);
+        	$('#'+options.pageframe+' input[data-type="url"]').val(options.queryurl);
+        	$('table[data-table="'+tablename+'"]').html('');  
+        	$('table[data-table="'+tablename+'"]').append('<tr>');     
         	for(i=0;i!=-1;i++){
         		if(options.th[i]!=null){
-        			$('tr:eq(0)',$(options.lovsetting.lovclass+' '+options.lovsetting.contentbox)).append('<th>'+options.th[i]+'</th>');
+        			$('tr:eq(0)',$('table[data-table="'+tablename+'"]')).append('<th>'+options.th[i]+'</th>');
         		}else{
         			break;
         			return i;
         		}
         	}
         	for(m=1;m<=10;m++){
-        		$('table',$(options.lovsetting.lovclass+' '+options.lovsetting.contentbox)).append('<tr>');
+        		$('table[data-table="'+tablename+'"]').append('<tr>');
         		for(n=0;n<i;n++){
-        			$('tr:eq('+m+')',$(options.lovsetting.lovclass+' '+options.lovsetting.contentbox)).append('<td class=\''+options.td[n]+'\'></td>');
+        			$('tr:eq('+m+')',$('table[data-table="'+tablename+'"]')).append('<td class="'+options.td[n]+'" data-column="db"></td>');
         		}
         	}
-        	$(options.lovsetting.querybox+' select').html('');
-        	$(options.lovsetting.queryval).val('');
-        	$('table',$(options.lovsetting.lovclass+' '+options.lovsetting.contentbox)).attr('id',options.lovsetting.tablename);
+        	$('#'+options.pageframe+' select[data-type="select"]').html('');
+        	$('#'+options.pageframe+' input[data-type="query_val"]').val('');
         	for(j=0;j!=-1;j++){
         		if(options.selectname[j]!=null&&options.selectvalue[j]!=null){
-        			$(options.lovsetting.querybox+' select').append('<option value='+options.selectvalue[j]+'>'+options.selectname[j]+'</option>');
+        			$('#'+options.pageframe+' select[data-type="select"]').append('<option value='+options.selectvalue[j]+'>'+options.selectname[j]+'</option>');
         		}else{
         			break;
         		}
         	}
         	$().choose();
         	/****默认查询参数如果为true，则默认打开Lov时点击一次查询按钮****/
-        	if(options.lovsetting.defaultquery==true){
-        		$(options.lovsetting.query).click();
+        	if(options.defaultquery==true){
+        		$('#'+options.pageframe+' i[data-crudtype="query"]').click();
         	}
-      	    width='-'+parseInt($(options.lovsetting.lovclass).css('width'))/2+'px';      	    
-      	    $(options.lovsetting.lovclass).css('margin-left',width);   
+        	width='-'+parseInt($('#'+options.pageframe).css('width'))/2+'px';
+        	$('#'+options.pageframe).css('margin-left',width);
         });    	
     }
     
@@ -193,45 +193,7 @@
 
 /*****************************插件配置说明*****************************
 @                              配置参数                             
-@    必需参数：														 
-@    data-lovname:
-@    data-lovname 为lov弹出框的标题名称，用于标题栏中
-@    data-lovsetting:
-@    data-lovsetting 为页面设置json参数，包含的属性有{
-@		defaultquery:lov默认查询属性，有true和false两个选项
-@		queryval:查询条件框的id或class
-@		lovclass:lov框的class
-@	    title:lov的标题框的class
-@		querybox:lov查询框的id或class
-@		contentbox:lov内容框的id或class
-@		tablename:lov的表格id
-@       prevpage:上一页按钮id
-@       nextpage:下一页按钮id
-@       query:查询按钮的id或class
-@		pageno:存放页码的html标签class或id
-@       queryurl:lov条件查询的url
-@       jsontype:lov的数据类型
-@		urltd:存放url的html标签id(urltd属性主要用于lov查询)
-@		typetd:存放jsontype的html标签的id(typetd属性主要用于lov查询)
-@    }
-@    data-th:
-@    data-th 为一个Array数组格式属性，存放lov表格的表格头名称
-@    data-td:
-@	 data-td 为一个Array数组格式属性，存放lov表格的行td的class值
-@    (data-td的顺序必须与data-th的顺序保持对应)
-@    data-selectname： 
-@    data-selectname 为一个Array数组格式属性
-@    存放lov查询条件<select>选择框中的条件选项名
-@    data-selectvalue： 
-@    data-selectvalue 为一个Array数组格式属性
-@    存放lov查询条件<select>选择框中的条件选项值
-@    （选项值的存放顺序必须与选项名保持对应）
-@    data-choose:
-@    data-choose 为一个Array数组格式属性
-@    存放lov要选取的值所对应的td的class
-@    data-recid:
-@    data-recid 为一个Array数组格式属性
-@    存放lov要选取的值所要放置的目标位置的id或class
-@    (data-recid中数据的顺序必须与data-choose中的顺序保持相对应)   
 @
-***********************************************************/
+@                             暂无，待更新
+@
+*******************************************************************/

@@ -37,15 +37,19 @@
 	$.fn.crudListener = function(){ 
 		/****清除绑定****/
 		$('input[data-crudtype]').off('click');	
+		$('input[data-name]').off('change');
 		$('button[data-crudtype]').off('click');
 		$('a[data-crudtype]').off('click');	
 		$('i[data-crudtype]').off('click');
 		/****绑定<input>标签****/
-		$('input[data-crudtype]').on('click', function(e) {		
+		$('input[data-crudtype]').on('click', function() {		
 			$(this).crud($(this).data());
 		});
+		$('input[data-name]').on('change', function() {		
+			$(this).setname($(this).data());
+		});
 		/****绑定<button>标签****/
-		$('button[data-crudtype]').on('click', function(e) {
+		$('button[data-crudtype]').on('click', function() {
 			$(this).crud($(this).data());
 		});
 		/****绑定<a>标签****/
@@ -54,65 +58,52 @@
 			$(this).crud($(this).data());
 		});
 		/****绑定<i>标签****/
-		$('i[data-crudtype]').on('click', function(e) {
+		$('i[data-crudtype]').on('click', function() {
 			$(this).crud($(this).data());
 		});
 	}  
 	/******************listener end***********************/	
+	
     $.fn.crud = function(options) {	
     	/*********************************************
-        			       设置默认属性
-			queryurl:查询url(若无设定此属性，则需设置pagesetting.urltd，queryurl属性主要用于主表查询) 
-			jsontype:数据遍历函数参数，选定遍历函数(若无设定此属性，则需设置pagesetting.typetd,jsontype属性主要用于主表查询) 
-			crudsetting{
-				loading:ajax载入动画class或id
-				refresh:刷新当前页按钮id
-				firstpage:第一页按钮id
-				lastpage:最后一页按钮id
-				prevpage:上一页按钮id
-				nextpage:下一页按钮id
-				setpagesize:页行数设置按钮class
-				pagesize:存放页行数的html标签class或id
-				pageno:存放页码的html标签class或id
-				pagerow:存放数据下标数的html标签class或id
-				delmsg:删除确认框抓取的信息相关的class或id(delmsg属性主要用于删除按钮)
-				tablename:表格id 
-				lovid:LOV框id(lovid属性主要用于lov查询)
-				urltd:存放url的html标签id(urltd属性主要用于lov查询)
-				typetd:存放jsontype的html标签的id(typetd属性主要用于lov查询)
-				}    
+        			       设置默认属性 
 		*********************************************/   
         var defaults={
-        	crudsetting:'{"loading":"","refresh":"","firstpage":"","lastpage":"","prevpage":"","nextpage":"","setpagesize":"","pagesize":"","pageno":"","pagerow":"","delmsg":"","tablename":"","lovid":"","urltd":"","typetd":""}'
+        	load:'.ajax_loading',
+        	pageframe:'lov',
+        	refresh:'refresh'
+        
         }             	
         /******继承默认属性******/
         var options = $.extend({}, defaults, options); 
+        var tablename=$('#'+options.pageframe).attr('data-table');
+        
         /****全局函数****/
         jQuery.global={
         	/******判断当前页是否为首页或末页******/
             pageFlag:function(firstPageFlag,lastPageFlag){
-           	    if(firstPageFlag=='true'){
-           			$(options.crudsetting.prevpage).css('display','none');
-           			$(options.crudsetting.firstpage).css('display','none');
-           		}else{
-           			$(options.crudsetting.prevpage).css('display','');
-           			$(options.crudsetting.firstpage).css('display','');
-           		}
-           		if(lastPageFlag=='true'){
-           			$(options.crudsetting.lastpage).css('display','none');
-            		$(options.crudsetting.nextpage).css('display','none');
-           		}else{
-           			$(options.crudsetting.lastpage).css('display','');
-           			$(options.crudsetting.nextpage).css('display','');
-           		}
+            	if(firstPageFlag=='true'){/****判断是否为首页，若是，隐藏第一页与上一页按钮****/
+					$('#'+options.pageframe+' i[data-pagetype="prevpage"]').css('display','none');
+					$('#'+options.pageframe+' i[data-pagetype="firstpage"]').css('display','none');
+       			}else{
+       				$('#'+options.pageframe+' i[data-pagetype="prevpage"]').css('display','');
+					$('#'+options.pageframe+' i[data-pagetype="firstpage"]').css('display','');
+       			}
+       			if(lastPageFlag=='true'){/****判断是否为末页，若是，隐藏最后一页与下一页按钮****/
+       				$('#'+options.pageframe+' i[data-pagetype="lastpage"]').css('display','none');
+					$('#'+options.pageframe+' i[data-pagetype="nextpage"]').css('display','none');
+       			}else{
+       				$('#'+options.pageframe+' i[data-pagetype="lastpage"]').css('display','');
+					$('#'+options.pageframe+' i[data-pagetype="nextpage"]').css('display','');
+       			}
            	},
            	validate:function(){
-           		var input=$(options.crudsetting.tablename+' input[required="required"]');
+           		var input=$('#'+options.pageframe+' input[required="required"]');
            		validate_flag=true;
 				for(i=0;i<input.length;i++){
 					if(input[i].value==''||input[i].value==null){
 						id=input[i].id;
-						label=$(options.crudsetting.tablename+' label[for="'+id+'"]').text();
+						label=$('#'+options.pageframe+' label[for="'+id+'"]').text();
 						alert('提交失败!错误信息:'+label+'不能为空！');
 						input[i].focus();
 						validate_flag=false;
@@ -128,23 +119,19 @@
         return this.each(function() {       	
         	/******删除方法******/
 			if(options.crudtype=='del'){
-				pageSize=parseInt($(options.crudsetting.pagesize).val());
-				/****删除提示信息弹出框内容尚未更改为可设置参数，待处理****/
 				tr=$(this).parent().parent();
-				name=tr.children(options.crudsetting.delmsg).text();
-				result=confirm('是否要删除用户('+name+')?');
-				/****删除提示信息弹出框内容尚未更改为可设置参数，待处理****/
+				col=tr.children('.'+options.col).text();
+				result=confirm(options.delmsg+col+'?');
 				if(result==true){
-					$(options.crudsetting.loading).show();/****显示加载动画****/
-					pageNo=parseInt($(options.crudsetting.pageno).val());
-					param='pageSize='+pageSize+'&pageNo='+pageNo+'&'+options.delparam[0]+'='+tr.children(options.delparam[1]).text();
+					$(options.load).show();/****显示加载动画****/
+					param=options.delparam[0]+'='+tr.children(options.delparam[1]).text();
 					$.ajax({
 						type:'post', 
 						data:param,
 						url:options.delurl,
 						dataType:'json',
 						success: function (data) {
-							$(options.crudsetting.refresh).click();/****点击刷新当前页按钮，刷新数据****/	
+							$('#'+options.refresh).click();/****点击刷新当前页按钮，刷新数据****/	
 						},
 						error: function () {
 							alert("获取Json数据失败");
@@ -157,7 +144,12 @@
 			}
 			/******预更新方法******/
 			else if(options.crudtype=='pre-update'){
-				$(options.crudsetting.loading).show();/****显示加载动画****/
+				$(options.load).show();/****显示加载动画****/
+				pageframe=$(this).attr('data-reveal-id');
+                $('#'+pageframe+' span[data-type]').hide();
+                $('#'+pageframe+' button[data-type]').hide();
+                $('#'+pageframe+' span[data-type="'+options.type+'"]').show();
+                $('#'+pageframe+' button[data-type="'+options.type+'"]').show();
 				tr=$(this).parent().parent();
 				param=options.updateparam[0]+'='+tr.children(options.updateparam[1]).text();/****设置参数****/
 				$.ajax({
@@ -167,7 +159,7 @@
 					dataType:'json',
 					success: function (data) {
 						jQuery.json.getUpdateJSON(data);/****获取目标更新行数据****/
-						$(options.crudsetting.loading).hide();/****隐藏加载动画****/
+						$(options.load).hide();/****隐藏加载动画****/
 					},
 					error: function () {
 						alert("获取Json数据失败");
@@ -179,28 +171,70 @@
 				jQuery.global.validate();
 				if(validate_flag==true){
 				/****************************/
-				jQuery.json.setUpdateParam();
-				pageSize=parseInt($(options.crudsetting.pagesize).val());
-				pageNo=parseInt($(options.crudsetting.pageno).val());
-				param=options.updateparam[0]+'='+$(options.updateparam[1]).val()+'&'+param;/****设置参数****/
-				$.ajax({
-					type:'post', 
-					data:param,
-					url:options.updateurl,
-					dataType:'json',
-					success: function (data) {
-    					if(data.retcode=="0"){
-    						alert("更新成功!");
-    						$('.'+options.dismissmodalclass).click();/****点击关闭更新框按钮****/
-    						$(options.crudsetting.refresh).click();/****点击刷新当前页按钮，刷新数据****/
-    					}else{
-    						alert("更新处理失败！错误信息:"+data.errbuf);
-    					}						  
-					},
-					error: function () {
-						alert("获取数据失败");
-					}			
-				});	
+					param=$('#'+options.pageframe+' form').serialize();
+	       	        console.log(param);
+				    param=options.updateparam[0]+'='+$(options.updateparam[1]).val()+'&'+param;/****设置参数****/
+				    $.ajax({
+				    	type:'post', 
+				    	data:param,
+				    	url:options.updateurl,
+				    	dataType:'json',
+				    	success: function (data) {
+				    		if(data.retcode=="0"){
+				    			alert("更新成功!");
+				    			$('.'+options.dismissmodalclass).click();/****点击关闭更新框按钮****/
+				    			$('#'+options.refresh).click();/****点击刷新当前页按钮，刷新数据****/
+				    		}else{
+				    			alert("更新处理失败！错误信息:"+data.errbuf);
+				    		}						  
+				    	},
+				    	error: function () {
+				    		alert("获取数据失败");
+				    	}			
+				    });	
+				/*****************************************/
+				}else{
+					return;
+				}
+			}
+			/******预新增方法******/
+			else if(options.crudtype=='pre-insert'){
+				$(options.load).show();/****显示加载动画****/
+				pageframe=$(this).attr('data-reveal-id');
+                $('#'+pageframe+' span[data-type]').hide();
+                $('#'+pageframe+' button[data-type]').hide();
+                $('#'+pageframe+' span[data-type="'+options.type+'"]').show();
+                $('#'+pageframe+' button[data-type="'+options.type+'"]').show();
+                $('#'+pageframe+' input[data-update="db"]').val('');
+                //$('#'+pageframe+' select[data-update="db"]').val('');
+                $('#'+pageframe+' textarea[data-update="db"]').val('');
+                $(options.load).hide();
+			}
+			/******新增方法******/
+			else if(options.crudtype=='insert'){
+				jQuery.global.validate();
+				if(validate_flag==true){
+				/****************************/
+					param=$('#'+options.pageframe+' form').serialize();
+	       	        console.log(param);
+				    $.ajax({
+				    	type:'post', 
+				    	data:param,
+				    	url:options.inserturl,
+				    	dataType:'json',
+				    	success: function (data) {
+				    		if(data.retcode=="0"){
+				    			alert("新增成功!");
+				    			$('.'+options.dismissmodalclass).click();/****点击关闭更新框按钮****/
+				    			$('#'+options.refresh).click();/****点击刷新当前页按钮，刷新数据****/
+				    		}else{
+				    			alert("新增处理失败！错误信息:"+data.errbuf);
+				    		}						  
+				    	},
+				    	error: function () {
+				    		alert("获取数据失败");
+				    	}			
+				    });	
 				/*****************************************/
 				}else{
 					return;
@@ -208,28 +242,41 @@
 			}
 			/******条件查询方法******/
 			else if(options.crudtype=='query'){
-				jQuery.json.setQueryParam();/****设置查询条件参数函数，暂时写在页面里，考虑改进中****/				
-				pageSize=parseInt($(options.crudsetting.pagesize).val());				
+				param=$('option:selected',$('#'+options.pageframe+' select[data-type="select"]')).val();
+				value=$('#'+options.pageframe+' input[data-type="query_val"]').val();
+       	        if(!value){
+       	            param=null;
+       	        }else{
+       	            /***************************************
+       	                 	因为%在url中为转义符，%25表达%字符本身，
+       	                 	所以需要使用正则表达式全局替换，把字符串中
+       	                 	所有的%替换为%25
+       	            *****************************************/
+       	            value=value.replace(/%/g,'%25');       
+       	            param=param+'='+value;
+       	        }				
+				pageSize=parseInt($('#'+options.pageframe+' input[data-type="size"]').val());				
 				pageNo=parseInt(1);
-				$(options.crudsetting.pageno).val(pageNo);
+				$('#'+options.pageframe+' input[data-type="number"]').val(pageNo);
 				param=param+'&pageSize='+pageSize+'&pageNo='+pageNo;
-				queryurl=$(options.crudsetting.urltd).val();
+				queryurl=$('#'+options.pageframe+' input[data-type="url"]').val();
 				$.ajax({
 					type:'post', 
 					data:param,
 					url:queryurl,
 					dataType:'json',
 					success: function (data) {
-						$(options.crudsetting.tablename+' td').html('');
+						$('table[data-table="'+tablename+'"] td').html('');
 						jQuery.json.getMSG(data);
-						$(options.crudsetting.tablename+' tr').css('display','');/****显示被隐藏行****/
-						jQuery.json.getContent(data,$(options.crudsetting.typetd).val());
+						$('table[data-table="'+tablename+'"] tr').css('display','');
+						jsontype=$('#'+options.pageframe+' input[data-type="jsontype"]').val();
+						jQuery.json.getContent(data,jsontype);
 						for(j=0;j<=(pageSize-(pageMaxRow-pageMinRow+1));j++){/****隐藏空白行****/
-	                	    $(options.crudsetting.tablename+' tr:eq('+(pageSize-j+1)+')').css('display','none');
+							$('table[data-table="'+tablename+'"] tr:eq('+(pageSize-j+1)+')').css('display','none');						
 	                	};
 						jQuery.global.pageFlag(firstPageFlag,lastPageFlag);
-						width='-'+parseInt($(options.crudsetting.lovid).css('width'))/2+'px';      	    
-		      	        $(options.crudsetting.lovid).css('margin-left',width);
+						width='-'+parseInt($('#'+options.pageframe).css('width'))/2+'px';
+			        	$('#'+options.pageframe).css('margin-left',width);
 					},
 					error: function () {
 						alert("获取Json数据失败");
@@ -238,43 +285,58 @@
 			}
         });
     }
+    
+    $.fn.setname = function(options) {	
+    	/*********************************************
+        			       设置默认属性 
+		*********************************************/   
+        var defaults={
+            fullname:'FULL_NAME'
+        }             
+        
+        /******继承默认属性******/
+        var options = $.extend({}, defaults, options); 
+        
+        return this.each(function() {       	
+        	/******姓******/
+			if(options.name=='LAST_NAME'){
+				lastname=$(this).val();
+				fullname=$('#'+options.fullname).val();
+				str=fullname.split(',');
+				if(str[1]==null||str[1]==''||str[1]==undefined){
+					fullname=lastname;
+				}else{
+					fullname=lastname+','+str[1];
+				}
+				$('#'+options.fullname).val(fullname);
+			}
+			/******名******/
+			else if(options.name=='FIRST_NAME'){
+				firstname=$(this).val();
+				fullname=$('#'+options.fullname).val();
+				str=fullname.split(',');
+				if(str[0]==null||str[0]==''||str[0]==undefined){
+					if(firstname==null||firstname==''){
+						fullname=firstname;
+					}else{
+						fullname=','+firstname;
+					}
+				}else{
+					if(firstname==null||firstname==''){
+						fullname=str[0];
+					}else{
+					    fullname=str[0]+','+firstname;
+					}
+				}
+				$('#'+options.fullname).val(fullname);
+			}     
+        });
+    }
 })(jQuery);
 
 /*****************************插件配置说明*****************************
 @                              配置参数                             
-@    必需参数：														 
-@    data-crudtype:
-@    data-crudtype 为分页按钮的类型，有'del','pre-update','update',
-@    'query' 四种类型
-@    'del':          删除按钮
-@    'pre-update':   加载更新框按钮
-@    'update':       更新按钮
-@    'query':        条件查询按钮
-@    data-crudsetting:
-@    data-crudsetting 为页面设置json参数，包含的属性有{
-@		loading:ajax载入动画class或id
-@		refresh:刷新当前页按钮id
-@		firstpage:第一页按钮id
-@		lastpage:最后一页按钮id
-@		prevpage:上一页按钮id
-@		nextpage:下一页按钮id
-@		setpagesize:页行数设置按钮class
-@		pagesize:存放页行数的html标签class或id
-@		pageno:存放页码的html标签class或id
-@		pagerow:存放数据下标数的html标签class或id
-@		delmsg:删除确认框抓取的信息相关的class或id(delmsg属性主要用于删除按钮)
-@		tablename:表格id 
-@		lovid:LOV框id(lovid属性主要用于lov查询)
-@		urltd:存放url的html标签id(urltd属性主要用于lov查询)
-@		typetd:存放jsontype的html标签的id(typetd属性主要用于lov查询)
-@    }
-@    非必需参数：
-@    data-queryurl:
-@    data-queryurl 为查询url
-@    (若无设定此属性，则需设置pagesetting.urltd，queryurl属性主要用于主表查询) 
-@    data-jsontype:
-@    data-jsontype:数据遍历函数参数，选定遍历函数
-@    (若无设定此属性，则需设置pagesetting.typetd,jsontype属性主要用于主表查询) 
+@               
+@                             暂无，待更新
 @
-@
-***********************************************************/
+*******************************************************************/

@@ -1,6 +1,7 @@
 package com.xinyiglass.springSample.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -90,6 +91,8 @@ public class EmpController {
 		e = (EmpVO) lockEmpVO.clone();
 		e.setEmpNumber(req.getParameter("EMP_NUMBER"));
 		e.setEmpId(empId);
+		e.setLastName(req.getParameter("LAST_NAME"));
+		e.setFirstName(req.getParameter("FIRST_NAME"));
 		e.setFullName(e.getLastName()+","+e.getFirstName());
 		e.setSex(req.getParameter("SEX"));
 		e.setPhoneNumber(req.getParameter("PHONE_NUMBER"));
@@ -113,7 +116,9 @@ public class EmpController {
 		e.setEmail(req.getParameter("EMAIL"));
 		e.setPhoneNumber(req.getParameter("PHONE_NUMBER"));
 		e.setHireDate(TypeConvert.str2sDate(req.getParameter("HIRE_DATE")));
-		e.setEnableDate(TypeConvert.str2Timestamp(req.getParameter("ENABLE_DATE")));
+		Timestamp SysTime = new Timestamp(System.currentTimeMillis()); 
+		e.setEnableDate(SysTime);
+		//e.setEnableDate(TypeConvert.str2Timestamp(req.getParameter("ENABLE_DATE")));
 		e.setJobId(TypeConvert.str2Long(req.getParameter("JOB_ID")));
 		e.setSalary(TypeConvert.str2Double(req.getParameter("SALARY")));
 		e.setManagerId(TypeConvert.str2Long(req.getParameter("MANAGER_ID")));
