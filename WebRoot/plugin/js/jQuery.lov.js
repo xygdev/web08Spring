@@ -77,7 +77,7 @@
             		$('#'+options.pageframe+' .'+options.dismissmodalclass).click();
             	});
         	}       	
-        	$('#'+options.pageframe+' input[data-type="title"]').text(options.lovname);
+        	$('#'+options.pageframe+' h1[data-type="title"]').text(options.lovname);
         	$('#'+options.pageframe+' input[data-type="number"]').val('1');
         	$('#'+options.pageframe+' i[data-pagetype="prevpage"]').css('display','none');
         	$('#'+options.pageframe+' i[data-pagetype="nextpage"]').css('display','none');
@@ -202,12 +202,20 @@
 			async: false,
 			dataType:'json',
 			success: function (data) {
-				console.log(m);
 				if(data.rows!=null){
 					for(n=0;n<data.rows.length;n++){					
 						option=document.createElement('option');
-						text=document.createTextNode(data.rows[n].DISPLAY);
-						option.value=data.rows[n].VALUE;
+						//用位置取值法(规则：第一位是显示值，第二位是返回值)
+						count=0;
+						for (var key in data.rows[n]){
+							if(count==0){
+								text=document.createTextNode(data.rows[n][key]);
+							}else if(count==1){
+								option.value=data.rows[n][key];
+								break;
+							}
+							count++;
+						}
 						option.appendChild(text);
 						list.appendChild(option);
 					}
