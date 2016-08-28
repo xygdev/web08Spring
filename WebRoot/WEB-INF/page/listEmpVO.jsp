@@ -81,7 +81,7 @@
          <div class="line"></div>
          <div class="content">
            <ul>
-             <li><a class="pointer" data-rowdefine="init" data-reveal-id="row-def">定义列</a></li>
+             <li><a class="pointer" data-rowdefine="init" data-reveal-id="row-def" data-pageframe="row-def" data-table="#tb">定义列</a></li>
              <li><a class="pointer">显示行数</a>
                <ul>
                  <li>
@@ -142,125 +142,20 @@
      <!-- 主表格按钮区域 end --> 
    
      <!-- 定义列区域 start --> 
-     <div id="row-def">
-       <div class="title">
-         <span class="title_name">定义列</span>
-       </div>
-	   <a class="close-reveal-modal">&#215;</a>
-       <div class="line"></div>
-       <div class="contain">
-         <select class="option_frame" id="hide" multiple='multiple' title='隐藏'></select>
-         <div class="button_frame">
-     	   <button class="button" data-rowdefine="hide" >
-     	     <i class="fa fa-angle-left fa-2x"></i>
-     	   </button>
-     	   <button class="button" data-rowdefine="show">
-     	     <i class="fa fa-angle-right fa-2x"></i>
-     	   </button>
-     	   <button class="button" data-rowdefine="hide_all">
-     	     <i class="fa fa-angle-double-left fa-2x"></i>
-     	   </button>
-     	   <button class="button" data-rowdefine="show_all">
-     	     <i class="fa fa-angle-double-right fa-2x"></i>
-     	   </button>
-         </div>
-         <select class="option_frame" id="show" multiple='multiple' title='显示'></select>
-         <div class="button_frame">
-     	   <button class="button" data-rowdefine="up">
-     	     <i class="fa fa-angle-up fa-2x"></i>
-     	   </button>
-     	   <button class="button" data-rowdefine="down">
-     	     <i class="fa fa-angle-down fa-2x"></i>
-     	   </button>
-     	   <button class="button" data-rowdefine="top">
-     	     <i class="fa fa-angle-double-up fa-2x"></i>
-     	   </button>
-     	   <button class="button" data-rowdefine="bottom">
-     	     <i class="fa fa-angle-double-down fa-2x"></i>
-     	   </button>
-         </div>
-       </div>
-     </div>
+     <jsp:include page="rowdefine.jsp"></jsp:include>
      <!-- 定义列区域 end -->
     
      <!-- 多维排序区域 start -->
-     <div id="orderby">
-       <div class="title">
-         <span class="title_name">多维排序</span>
-       </div>
-       <a class="close-reveal-modal">&#215;</a>
-       <div class="line"></div>
-       <div class="contain">
-         <div class="item" id="col1">
-           <span>排序一：</span>
-           <select class="select"></select>
-		   <input type="radio" name="col1" class="col1" checked="checked" value="ASC" />ASC 
-           <input type="radio" name="col1" class="col1" value="DESC" />DESC 
-         </div>  
-         <div class="item" id="col2">
-           <span>排序二：</span>
-           <select class="select"></select>
-		   <input type="radio" name="col2" class="col2" checked="checked" value="ASC" />ASC 
-           <input type="radio" name="col2" class="col2" value="DESC" />DESC 
-         </div> 
-         <div class="item" id="col3">
-           <span>排序三：</span>
-           <select class="select"></select>
-		   <input type="radio" name="col3" class="col3" checked="checked" value="ASC" />ASC 
-           <input type="radio" name="col3" class="col3" value="DESC" />DESC 
-         </div> 
-       </div>
-       <div class="footer">
-         <button class='right pointer' data-order=true >排序</button>
-       </div>
-     </div>
+     <jsp:include page="orderby.jsp"></jsp:include>
      <!-- 多维排序区域 end -->
    
      <!-- 个人配置区域 start -->
-     <div id="config">
-       <div class="title">
-         <span class="title_name">个人配置</span>
-       </div>
-       <a class="close-reveal-modal">&#215;</a>
-       <div class="line"></div>
-       <div class="contain" id="configtabs">
-         <ul>
-           <li><a href="#tabs-1">保存配置</a></li>
-           <li><a href="#tabs-2">加载配置</a></li>
-         </ul>
-         <div id="tabs-1" class='tab'>
-           <div class="item" style="text-indent:3rem">
-             <label class="pointer" for="USER_INTERACT_NAME">自定义名称：</label>
-             <input type="text" name="USER_INTERACT_NAME" id="USER_INTERACT_NAME">
-           </div>
-           <div class="item" style="text-indent:6rem">
-             <label class="pointer" for="DESCRIPTION">描述：</label>
-             <input type="text" name="DESCRIPTION" id="DESCRIPTION">
-           </div>
-           <div class="item" style="text-indent:6rem">
-             <label class="pointer" for="PUBLIC_FLAG">共享</label>
-             <input type="checkbox" name="PUBLIC_FLAG" id="PUBLIC_FLAG">
-             <label class="pointer" for="DEFAULT_FLAG">默认</label>
-             <input type="checkbox" name="DEFAULT_FLAG" id="DEFAULT_FLAG">
-             <label class="pointer" for="AUTOQUERY_FLAG">自动查询</label>
-             <input type="checkbox" name="AUTOQUERY_FLAG" id="AUTOQUERY_FLAG"> 
-           </div>
-           <div class="item">
-             <button class='pointer' data-config="save" >保存</button>
-           </div>
-         </div>
-         <div id="tabs-2" class='tab'>
-           <div class="item" style="text-indent:6rem;margin:50px auto 60px">
-             <label class="pointer" for="loding_format">选择配置:</label>
-             <select id="loding_format"></select>
-           </div>
-           <div class="item">
-             <button class='pointer' data-config="load">加载</button>
-           </div>
-         </div>
-       </div>
-     </div>
+     <jsp:include page="config.jsp"></jsp:include>
      <!-- 个人配置区域 end -->
+     
+     <!-- lov区域 start -->
+     <jsp:include page="lov.jsp"></jsp:include>
+     <!-- lov区域 end -->
    
      <!-- 更新区域 start -->
      <div id='uf' class='update_frame'>     
@@ -311,47 +206,11 @@
      </div> 
      <!-- 更新区域 end -->
    
-     <!-- Lov区域 start -->
-     <div class='lov_frame' id='lov' data-table="LOV">
-       <a class="close-lov">&#215;</a>
-       <div class='lov_title'>
-         <h1 data-type="title">此处填写标题</h1>
-       </div>
-       <div class='blackline'></div>
-       <div class='querybox'>
-         <div class="left">
-           Search  
-         </div>  
-         <select data-type="select" class="left"></select>  
-         <input type="text" data-type="query_val" class="left" >
-         <div class="left lov_button">
-           <i class="fa fa-search pointer" data-crudtype="query" data-pageframe="lov"></i>
-         </div>
-         <div class="left lov_button">
-           <i class="fa fa-arrow-circle-left pointer" data-pagetype="prevpage" data-pageframe="lov"  data-pagesetting='{"prevpage":"#lov_prev","nextpage":"#lov_next","pagesize":"#lov_page_size","pageno":"#lov_page_no","tablename":"#job_query","typetd":"#lov_jsontype","urltd":"#lov_queryurl"}'></i>
-         </div>
-         <input type="text" id="lov_page_no" data-type="number" class="left" value="1" readonly='readonly'>
-         <div class="left lov_button">
-           <i class="fa fa-arrow-circle-right pointer" data-pagetype="nextpage" data-pageframe="lov" data-pagesetting='{"prevpage":"#lov_prev","nextpage":"#lov_next","pagesize":"#lov_page_size","pageno":"#lov_page_no","tablename":"#job_query","typetd":"#lov_jsontype","urltd":"#lov_queryurl"}' ></i> 
-         </div>   
-         <input type="hidden" data-type="size" value="10">
-         <input type="hidden" data-type="url">
-         <input type="hidden" data-type="jsontype">                
-       </div>
-       <div class='contentbox'>
-         <table data-table="LOV"></table>
-       </div>
-       <div class='footer'></div>
-     </div>
-     <div class='lov-modal-bg'>
-     </div>
-     <!-- lov区域 end -->
-   
-     <!-- hidden属性存放区域 start -->
+     <!-- 用户信息存放区域 start -->
      <input type="hidden" id="USER_ID" value="123456">  
      <input type="hidden" id="INTERACT_CODE" value="USER_INFO"> 
      <input type="hidden" id="HEADER_ID" value=""> 
-     <!-- hidden属性存放区域 end -->  
+     <!-- 用户信息存放区域 end -->  
    </div>
      
     <script>       
