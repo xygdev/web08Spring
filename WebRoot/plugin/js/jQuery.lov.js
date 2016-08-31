@@ -14,6 +14,7 @@
                        若不存在，则清空LOV的text框并提醒用户使用LOV选择
                        或重新手动输入
            2016.8.22   代码重构，减少配置参数
+           2016.8.31   修改fn.modify,设置情况lov框后,同时清空隐藏id框
 *********************************************************/
 (function($) {	
 	/******************listener start***********************
@@ -111,7 +112,7 @@
         	$().choose();
         	/****默认查询参数如果为true，则默认打开Lov时点击一次查询按钮****/
         	if(options.defaultquery==true){
-        		$('#'+options.pageframe+' i[data-crudtype="query"]').click();
+        		$('#'+options.pageframe+' i[data-crudtype="lovquery"]').click();
         	}
         	width='-'+parseInt($('#'+options.pageframe).css('width'))/2+'px';
         	$('#'+options.pageframe).css('margin-left',width);
@@ -152,8 +153,10 @@
 							result=confirm("输入的值不存在，是否通过值列表选取");	
 							if(result==true){
 								$('#'+options.pageframe).draggable('enable');
+								$('#'+options.hiddenid).val('');
 								$('#'+options.lovbtn).click();
 							}else{
+								$('#'+options.hiddenid).val('');
 								$('#'+options.pageframe).draggable('enable');
 								return;
 							}					
@@ -195,6 +198,8 @@
     //返回的select为DOM对象，使用原生JS对其进行操作
     for(m=0;m<select.length;m++){
     	list=document.getElementById(select[m].id);
+    	opt=document.createElement('option');
+		list.appendChild(opt);
     	//var url=select[i].attributes['data-listurl'].value;
     	$.ajax({
 			type:'post', 
@@ -227,39 +232,7 @@
 				alert("获取Json数据失败");
 			}
 		});
-    }
-    /*
-    $.fn.list = function(options) {   
-    	var defaults={
-             pageframe:''
-    	} 
-    	
-    	var options = $.extend({}, defaults, options);
-    	
-    	return this.each(function() {
-    		select=$('select',$('#'+options.pageframe+' form'));
-    		$.ajax({
-				type:'post', 
-				data:param,
-				url:options.listurl,
-				dataType:'json',
-				success: function (data) {
-					if(data.rows!=null){
-						for(i=0;i<data.rows.length;i++){
-							$(select).append('<option value="'+data.rows[i].VALUE+'">'+data.rows[i].DISPLAY+'</option>');
-						}
-					}else{
-						alert('返回数据为空，请联系IT部门人员');
-					}
-				},
-				error: function () {
-					alert("获取Json数据失败");
-				}
-    		});
-    	});
-    }
-    */
-    
+    }    
     
 })(jQuery);
 

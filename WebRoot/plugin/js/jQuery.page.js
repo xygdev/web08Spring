@@ -15,6 +15,9 @@
            				自动遍历设置空白行display:none
            2016.5.11    代码调优，由400行代码减少至150行
            2016.7.12    代码优化，并新增插件配置说明
+           2016.8.26    代码优化，减少配置参数
+           2016.8.31    新增参数cond,cond为条件查询的相关参数
+                        修改bug，设置当数据只有一页时，同时隐藏上一页，下一页等四个按钮
 *********************************************************/
 (function($) {                                      	
 	/******************listener start***********************
@@ -89,7 +92,11 @@
 		    	}		   	
 				queryurl=$('#'+options.pageframe+' input[data-type="url"]').val();
 				orderby=$('#'+options.pageframe+' input[data-type="orderby"]').val();
+				cond=$('#'+options.pageframe+' input[data-type="cond"]').val();
 				param=param+'&orderby='+orderby;
+				if(cond!=null&&cond!=''){
+					param=param+'&'+cond;
+				}
 				$.ajax({
 					async:true,
 					type:'post', 
@@ -130,6 +137,10 @@
 								$('#'+options.pageframe+' input[data-type="number"]').val(1);
 								$(options.closebtn).click();
 							}else if(options.pagetype=='lastpage'){/****如果为最后一页按钮，将参数totalPages赋值到页码html标签中****/
+								if(totalPages==1){
+									$('#'+options.pageframe+' i[data-pagetype="prevpage"]').css('display','none');
+									$('#'+options.pageframe+' i[data-pagetype="firstpage"]').css('display','none');
+								}
 								$('#'+options.pageframe+' input[data-type="number"]').val(parseInt(totalPages));
 							}else{
 								$('#'+options.pageframe+' input[data-type="number"]').val(pageNo);

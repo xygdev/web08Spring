@@ -15,7 +15,7 @@
         <select data-type="select" class="left"></select>  
         <input type="text" data-type="query_val" class="left" >
         <div class="left lov_button">
-          <i class="fa fa-search pointer" data-crudtype="query" data-pageframe="lov"></i>
+          <i class="fa fa-search pointer" data-crudtype="lovquery" data-pageframe="lov"></i>
         </div>
         <div class="left lov_button">
           <i class="fa fa-arrow-circle-left pointer" data-pagetype="prevpage" data-pageframe="lov"></i>

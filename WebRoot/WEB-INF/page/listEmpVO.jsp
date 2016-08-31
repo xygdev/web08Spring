@@ -63,7 +63,7 @@
      <!-- 主表格区域 end -->
    
      <!-- 主表格按钮区域 start -->
-     <div class="table_button">
+     <div class="table_button" id="table" data-table="EMP">
        <div class="setting">
          <i class="fa fa-cog pointer" data-reveal-id="setting" data-dismissmodalclass="close-setting"></i>
        </div>
@@ -71,8 +71,11 @@
          <i class="fa fa-user-plus pointer" data-reveal-id="uf" data-dismissmodalclass="close-update-frame" data-crudtype="pre-insert" data-type="insert" ></i>
        </div>
        <div class="setting">
-         <i id='refresh' class="fa fa-refresh pointer" data-pagetype='refresh' data-pageframe="table"></i>
+         <i class="fa fa-search-plus pointer" data-reveal-id="query" data-dismissmodalclass="close-query-frame"></i>
        </div>
+       <div class="setting">
+         <i id='refresh' class="fa fa-refresh pointer" data-pagetype='refresh' data-pageframe="table"></i>
+       </div>       
        <div id="setting">
          <div class="title">
            <span>设置</span>
@@ -116,7 +119,7 @@
            </ul>
          </div>      
        </div>
-       <div id="table" data-table="EMP">
+       <div>
          <div class="arrow_S margin">
            <i id="last" class="fa fa-step-forward pointer" data-pagetype="lastpage" data-pageframe="table"></i>
          </div>
@@ -132,11 +135,12 @@
          <div class="arrow_S">
            <i id="first" class="fa fa-step-backward pointer" data-pagetype="firstpage" data-pageframe="table"></i>
          </div>
-         <input type="hidden" data-type="size" id="page_size" value="10">
-         <input type="hidden" data-type="number" id="page_no" value="1">
-         <input type="hidden" data-type="orderby" id="ORDER_BY" value="EMP_ID ASC"> 
-         <input type="hidden" data-type="url" value="emp/getEmpPage.do">
-         <input type="hidden" data-type="jsontype" value="table"> 
+         <input type="hidden" data-type="size" id="page_size" value="10"/>
+         <input type="hidden" data-type="number" id="page_no" value="1"/>
+         <input type="hidden" data-type="cond" value="HIRE_DATE_F=&HIRE_DATE_T="/>
+         <input type="hidden" data-type="orderby" id="ORDER_BY" value="EMP_ID ASC"/> 
+         <input type="hidden" data-type="url" value="emp/getEmpPage.do"/>
+         <input type="hidden" data-type="jsontype" value="table"/> 
        </div>
      </div>
      <!-- 主表格按钮区域 end --> 
@@ -160,13 +164,13 @@
      <!-- 更新区域 start -->
      <div id='uf' class='update_frame'>     
        <div class='title'>      
-         <span data-type="update"><i class="fa fa-user fa-1x" aria-hidden="true"></i>更新员工</span>
-         <span data-type="insert"><i class="fa fa-user fa-1x" aria-hidden="true"></i>新增员工</span>
+         <span data-type="update"><i class="fa fa-user"></i>更新员工</span>
+         <span data-type="insert"><i class="fa fa-user"></i>新增员工</span>
        </div>
-       <a class="close-update-frame">&#215;</a>
+       <a class="close-update-frame" data-type="close">&#215;</a>
        <div class='line'></div>
        <div class='content'>
-         <form id='updateData'>
+         <form>
            <input type='hidden' id='EMP_ID' data-update="db">
            <label for='EMP_NUMBER' class='left'>工号</label>
            <input type='text' id='EMP_NUMBER' name='EMP_NUMBER' data-update="db" required='required' class='left'>
@@ -177,9 +181,7 @@
            <label for='FIRST_NAME' class='left'>名</label>
            <input type='text' id='FIRST_NAME' data-name="FIRST_NAME" name='FIRST_NAME' data-update="db" required='required' class='left'>
            <label for='SEX' class='left'>性别</label>
-           <select class='left' id='SEX' name='SEX' data-update="db" required='required' data-listurl="list/getSex.do">
-
-           </select>       
+           <select class='left' id='SEX' name='SEX' data-update="db" required='required' data-listurl="list/getSex.do"></select>       
            <label for='PHONE_NUMBER' class='left'>电话</label>
            <input type='text' id='PHONE_NUMBER' name='PHONE_NUMBER' data-update="db" required='required' class='left'>
            <label for='SALARY' class='left'>薪酬</label>
@@ -200,11 +202,44 @@
          </form>
        </div>
        <div class='foot'>       
-         <button class="right update_confirm pointer" data-type="update" data-dismissmodalclass="close-update-frame" data-crudtype="update" data-pageframe="uf" data-updateurl="emp/update.do" data-updateparam=["EMP_ID","#EMP_ID"] >提交更新</button>
-         <button class="right update_confirm pointer" data-type="insert" data-dismissmodalclass="close-update-frame" data-crudtype="insert" data-pageframe="uf" data-inserturl="emp/insert.do">新增</button>
+         <button class="right update_confirm pointer" data-type="update" data-crudtype="update" data-pageframe="uf" data-updateurl="emp/update.do" data-updateparam=["EMP_ID","#EMP_ID"] >提交更新</button>
+         <button class="right update_confirm pointer" data-type="insert" data-crudtype="insert" data-pageframe="uf" data-inserturl="emp/insert.do">新增</button>
        </div>    
      </div> 
-     <!-- 更新区域 end -->
+     <!-- 更新区域 end -->  
+     
+     <!-- 查询区域 start -->
+     <div id='query' class='query_frame'>     
+       <div class='title'>      
+         <span><i class="fa fa-user"></i>员工查询</span>
+       </div>
+       <a class="close-query-frame" data-type="close">&#215;</a>
+       <div class='line'></div>
+       <div class='content'>
+         <form>
+            <label for='HIRE_DATE_F' class='left'>雇佣日期:</label>
+            <input type='text' id='HIRE_DATE_F' name='HIRE_DATE_F' class='left' placeholder="起始雇佣日期">
+            <input type='text' id='HIRE_DATE_T' name='HIRE_DATE_T' class='left' placeholder="截止雇佣日期">
+            <label for='EMP_NUMBER_F' class='left'>工号:</label>
+            <input type='text' id='EMP_NUMBER_F' name='EMP_NUMBER_F' class='left' placeholder="起始工号">
+            <input type='text' id='EMP_NUMBER_T' name='EMP_NUMBER_T' class='left' placeholder="截止工号">
+            <label for='JOB_NAME_Q' class='left'>职位:</label>
+            <input type='text' id='JOB_NAME_Q' name='JOB_NAME' class='left short' data-modify='true'  data-pageframe="query" data-validurl='lov/validJobName.do' data-queryurl='lov/getJobId.do' data-lovbtn='JOB_LOV_Q' data-hiddenid='JOB_ID_Q' data-queryparam=["jobname","JOB_ID"]>
+            <input type='hidden' id='JOB_ID_Q' name='JOB_ID'>
+            <input type='button' id="JOB_LOV_Q" class='left button pointer' data-pageframe="lov" data-reveal-id="lov" data-bg="lov-modal-bg" data-dismissmodalclass='close-lov' data-lovname="职位查询" data-queryurl="lov/getJobPage.do" data-jsontype="job" data-defaultquery="true" data-th=["职务编号","职务名称"] data-td=["JOB_ID","JOB_NAME"] data-selectname=["职务编号","职务名称"] data-selectvalue=["JOB_ID","JOB_NAME"] data-choose=[".JOB_ID",".JOB_NAME"] data-recid=["#JOB_ID_Q","#JOB_NAME_Q"] value="···">
+            <br style="clear:both"/>
+            <label for='FULL_NAME_Q' class='left'>全名</label>
+            <input type='text' id='FULL_NAME_Q' name='FULL_NAME' class='left'>
+            <br style="clear:both"/>
+            <label for='DISABLE_FLAG' class='left nolength'>是否排除已失效部门中的员工</label>
+            <input type="checkbox" id='DISABLE_FLAG' name='DISABLE_FLAG' style="width:auto;margin:10px 10px "/> 
+         </form>
+       </div>
+       <div class='foot'>             
+         <button class="right pointer"  data-buttonframe="table" data-crudtype="query" data-pageframe="query">员工查询</button>
+       </div> 
+     </div> 
+     <!-- 查询区域 end -->  
    
      <!-- 用户信息存放区域 start -->
      <input type="hidden" id="USER_ID" value="123456">  
@@ -217,6 +252,7 @@
          $(function() {
             //设置拖拽
     		$("#uf").draggable();
+    		$("#query").draggable();
     		$("#row-def").draggable();
     		$("#orderby").draggable();
     		$("#config").draggable();

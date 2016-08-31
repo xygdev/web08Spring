@@ -26,6 +26,8 @@
 		               验证更新框中的所有required的input框的值，返回一个boolean值validateFlag
 		               点击更新按钮时，验证validateFlag,如果为true,则可以更新
 		               如果为false,则存在值为空的必填项
+		   2016.8.26   优化代码，减少输入参数
+		   2016.8.31   新增条件查询功能
 ***************************************************************************************/
 (function($) {
 	/******************listener start***********************
@@ -98,7 +100,7 @@
        			}
            	},
            	validate:function(){
-           		var input=$('#'+options.pageframe+' input[required="required"]');
+           		var input=$('#'+options.pageframe+' [required="required"]');
            		validate_flag=true;
 				for(i=0;i<input.length;i++){
 					if(input[i].value==''||input[i].value==null){
@@ -182,7 +184,7 @@
 				    	success: function (data) {
 				    		if(data.retcode=="0"){
 				    			alert("更新成功!");
-				    			$('.'+options.dismissmodalclass).click();/****点击关闭更新框按钮****/
+				    			$('#'+options.pageframe+' a[data-type="close"]').click();/****点击关闭更新框按钮****/
 				    			$('#'+options.refresh).click();/****点击刷新当前页按钮，刷新数据****/
 				    		}else{
 				    			alert("更新处理失败！错误信息:"+data.errbuf);
@@ -206,7 +208,7 @@
                 $('#'+pageframe+' span[data-type="'+options.type+'"]').show();
                 $('#'+pageframe+' button[data-type="'+options.type+'"]').show();
                 $('#'+pageframe+' input[data-update="db"]').val('');
-                //$('#'+pageframe+' select[data-update="db"]').val('');
+                $('#'+pageframe+' select[data-update="db"]').val('');
                 $('#'+pageframe+' textarea[data-update="db"]').val('');
                 $(options.load).hide();
 			}
@@ -225,7 +227,7 @@
 				    	success: function (data) {
 				    		if(data.retcode=="0"){
 				    			alert("新增成功!");
-				    			$('.'+options.dismissmodalclass).click();/****点击关闭更新框按钮****/
+				    			$('#'+options.pageframe+' a[data-type="close"]').click();/****点击关闭更新框按钮****/
 				    			$('#'+options.refresh).click();/****点击刷新当前页按钮，刷新数据****/
 				    		}else{
 				    			alert("新增处理失败！错误信息:"+data.errbuf);
@@ -242,6 +244,15 @@
 			}
 			/******条件查询方法******/
 			else if(options.crudtype=='query'){
+				cond=$('#'+options.pageframe+' form').serialize();
+       	        console.log(cond);
+       	        $('#'+options.buttonframe+' input[data-type="cond"]').val(cond);
+       	        $('#'+options.buttonframe+' input[data-type="number"]').val(1);   
+       	        $('#'+options.pageframe+' a[data-type="close"]').click();
+       	        $('#'+options.buttonframe+' i[data-pagetype="refresh"]').click();
+			}
+			/******lov条件查询方法******/
+			else if(options.crudtype=='lovquery'){
 				param=$('option:selected',$('#'+options.pageframe+' select[data-type="select"]')).val();
 				value=$('#'+options.pageframe+' input[data-type="query_val"]').val();
        	        if(!value){

@@ -2,6 +2,7 @@ package com.xinyiglass.springSample.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,7 +56,15 @@ public class EmpController {
 		int pageNo=Integer.parseInt(req.getParameter("pageNo"));
 		boolean goLastPage=Boolean.parseBoolean(req.getParameter("goLastPage"));
 		String orderby=req.getParameter("orderby");
-		res.getWriter().print(empVOService.findForPage(pageSize, pageNo, goLastPage, orderby));
+		Date hire_date_f=TypeConvert.str2uDate(req.getParameter("HIRE_DATE_F"));
+		Date hire_date_t=TypeConvert.str2uDate(req.getParameter("HIRE_DATE_T"));
+		Long jobid=TypeConvert.str2Long(req.getParameter("JOB_ID"));
+		String empno_f=req.getParameter("EMP_NUMBER_F");
+		String empno_t=req.getParameter("EMP_NUMBER_T");
+		String fullname=req.getParameter("FULL_NAME");
+		String disableflag=req.getParameter("DISABLE_FLAG");
+		
+		res.getWriter().print(empVOService.findForPage(pageSize, pageNo, goLastPage, orderby,hire_date_f,hire_date_t,jobid,empno_f,empno_t,fullname,disableflag));
 	}
 	
 	@RequestMapping(value = "/delete.do", method = RequestMethod.POST)

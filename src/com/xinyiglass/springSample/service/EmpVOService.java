@@ -1,5 +1,6 @@
 package com.xinyiglass.springSample.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import xygdev.commons.entity.PlsqlRetValue;
 import xygdev.commons.page.PagePub;
 import xygdev.commons.springjdbc.DevTransactionPub;
+import xygdev.commons.sqlStmt.SqlStmtPub;
 
 import com.xinyiglass.springSample.dao.EmpVODao;
 import com.xinyiglass.springSample.entity.EmpVO;
@@ -56,10 +58,19 @@ public class EmpVOService {
 	}
 	
 	@Transactional(propagation=Propagation.NOT_SUPPORTED,readOnly=true)
-	public String findForPage(int pageSize,int pageNo,boolean goLastPage,String orderby) throws Exception{
-		String sql="select * from XYG_JBO_CRM_EMP_V A order by "+orderby;
+	public String findForPage(int pageSize,int pageNo,boolean goLastPage,String orderby,Date hire_date_f,Date hire_date_t,Long jobid,String empno_f,String empno_t,String fullname,String disableflag) throws Exception{
 		Map<String,Object> paramMap=new HashMap<String,Object>();
-		return pagePub.qPageForJson(sql, paramMap, pageSize, pageNo, goLastPage);
+		StringBuffer sqlBuf=new StringBuffer();
+		sqlBuf.append("select * from XYG_JBO_CRM_EMP_V A where 1=1");
+		sqlBuf.append(SqlStmtPub.getAndStmt("HIRE_DATE", hire_date_f,hire_date_t,paramMap));
+		sqlBuf.append(SqlStmtPub.getAndStmt("JOB_ID", jobid,paramMap));
+		sqlBuf.append(SqlStmtPub.getAndStmt("EMP_NUMBER", empno_f,empno_t,paramMap));
+		sqlBuf.append(SqlStmtPub.getAndStmt("FULL_NAME", fullname,paramMap));
+		if(disableflag!=null&&disableflag.equals("on")){
+	        sqlBuf.append(" AND EXISTS(SELECT 1 FROM XYG_JBO_CRM_DEPT D WHERE (DISABLED_DATE IS NULL OR DISABLED_DATE > SYSDATE) AND D.DEPT_ID=A.DEPARTMENT_ID)");
+		}
+		sqlBuf.append(" ORDER BY "+orderby);
+		return pagePub.qPageForJson(sqlBuf.toString(), paramMap, pageSize, pageNo, goLastPage);
 	}
 	
 	//由于更新前要加锁，另外要验证数据是否被别人改了，所以要lockEmp和updEmp
