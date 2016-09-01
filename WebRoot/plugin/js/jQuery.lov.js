@@ -66,7 +66,7 @@
         	/****Lov取值函数，将Lov表格中的值选入预更新框并关闭lov框****/        	        	
         	$.fn.choose = function(){
             	$('table[data-table="'+tablename+'"] td').on('click', function() {
-            		for(k=0;k<2;k++){
+            		for(k=0;k<options.choose.length;k++){
             			text=$(this).parent().children(options.choose[k]).text();
             			if(!text){
             				alert('不能选择空值');	
@@ -140,7 +140,7 @@
     		if(options.modify==true){
     			input=$(this);
     			param=$(this).val();
-    			param=options.queryparam[0]+'='+param;
+    			param=options.param+'='+param;
     			$('#'+options.pageframe).draggable('disable');
     			$.ajax({
 					type:'post', 
@@ -168,7 +168,9 @@
 								dataType:'json',
 								success: function (data) {
 									if(data.rows!=null){
-										$('#'+options.hiddenid).val(data.rows[0][options.queryparam[1]]);
+										for(m=0;m<options.hiddenid.length;m++){
+											$('#'+options.hiddenid[m]).val(data.rows[0][options.hiddenval[m]]);
+										}
 									}else{
 										alert('返回数据为空，请联系IT部门人员');
 									}

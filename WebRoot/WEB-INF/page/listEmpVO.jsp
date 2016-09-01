@@ -189,11 +189,11 @@
            <label for='HIRE_DATE' class='left'>雇佣日期</label>
            <input type='text' id='HIRE_DATE' name='HIRE_DATE' data-update="db" required='required' class='left'>  
            <label for='JOB_NAME' class='left'>职位</label> 
-           <input type='text' id='JOB_NAME' name='JOB_NAME' data-update="db" class='left short' data-modify='true' required='required' data-pageframe="uf" data-validurl='lov/validJobName.do' data-queryurl='lov/getJobId.do' data-lovbtn='JOB_LOV' data-hiddenid='JOB_ID' data-queryparam=["jobname","JOB_ID"]>
+           <input type='text' id='JOB_NAME' name='JOB_NAME' data-update="db" class='left short' data-modify='true' required='required' data-pageframe="uf" data-validurl='lov/validJobName.do' data-queryurl='lov/getJobId.do' data-lovbtn='JOB_LOV' data-hiddenid=["JOB_ID"] data-hiddenval=["JOB_ID"] data-param="jobname"/>
            <input type='hidden' id='JOB_ID' name='JOB_ID' data-update="db">
            <input type='button' id="JOB_LOV" class='left button pointer' data-pageframe="lov" data-reveal-id="lov" data-bg="lov-modal-bg" data-dismissmodalclass='close-lov' data-lovname="职位查询" data-queryurl="lov/getJobPage.do" data-jsontype="job" data-defaultquery="true" data-th=["职务编号","职务名称"] data-td=["JOB_ID","JOB_NAME"] data-selectname=["职务编号","职务名称"] data-selectvalue=["JOB_ID","JOB_NAME"] data-choose=[".JOB_ID",".JOB_NAME"] data-recid=["#JOB_ID","#JOB_NAME"] value="···">
            <label for='DEPT_NAME' class='left'>部门</label>
-           <input type='text' id='DEPT_NAME' name='DEPT_NAME' data-update="db" class='left short' data-modify='true' required='required' data-pageframe="uf" data-validurl='lov/validDeptName.do' data-queryurl='lov/getDeptId.do' data-lovbtn='DEPT_LOV' data-hiddenid='DEPARTMENT_ID' data-queryparam=["deptname","DEPT_ID"]>
+           <input type='text' id='DEPT_NAME' name='DEPT_NAME' data-update="db" class='left short' data-modify='true' required='required' data-pageframe="uf" data-validurl='lov/validDeptName.do' data-queryurl='lov/getDeptId.do' data-lovbtn='DEPT_LOV' data-hiddenid=["DEPARTMENT_ID"] data-hiddenval=["DEPT_ID"] data-param="deptname"/>
            <input type='hidden' id='DEPARTMENT_ID' name='DEPARTMENT_ID' data-update="db">
            <input type='button' id='DEPT_LOV' class='left button pointer' data-pageframe="lov" data-reveal-id="lov" data-bg="lov-modal-bg" data-dismissmodalclass='close-lov' data-lovname="部门查询" data-queryurl="lov/getDeptPage.do" data-jsontype="dept" data-th=["部门编号","部门名称","部门分类","部门主管","部门地点","启用日期","备注"] data-td=["DEPT_ID","DEPT_NAME","DEPT_TYPE_DESC","MANAGER_NAME","LOCATION_NAME","ENABLE_DATE","REMARK"] data-selectname=["部门名称","部门分类","部门主管"] data-selectvalue=["DEPT_NAME","DEPT_TYPE_DESC","MANAGER_NAME"] data-choose=[".DEPT_ID",".DEPT_NAME"] data-recid=["#DEPARTMENT_ID","#DEPT_NAME"]  value="···">
            <br style="clear:both"/>
@@ -224,7 +224,7 @@
             <input type='text' id='EMP_NUMBER_F' name='EMP_NUMBER_F' class='left' placeholder="起始工号">
             <input type='text' id='EMP_NUMBER_T' name='EMP_NUMBER_T' class='left' placeholder="截止工号">
             <label for='JOB_NAME_Q' class='left'>职位:</label>
-            <input type='text' id='JOB_NAME_Q' name='JOB_NAME' class='left short' data-modify='true'  data-pageframe="query" data-validurl='lov/validJobName.do' data-queryurl='lov/getJobId.do' data-lovbtn='JOB_LOV_Q' data-hiddenid='JOB_ID_Q' data-queryparam=["jobname","JOB_ID"]>
+            <input type='text' id='JOB_NAME_Q' name='JOB_NAME' class='left short' data-modify='true'  data-pageframe="query" data-validurl='lov/validJobName.do' data-queryurl='lov/getJobId.do' data-lovbtn='JOB_LOV_Q' data-hiddenid=["JOB_ID_Q"] data-hiddenval=["JOB_ID"] data-param="jobname">
             <input type='hidden' id='JOB_ID_Q' name='JOB_ID'>
             <input type='button' id="JOB_LOV_Q" class='left button pointer' data-pageframe="lov" data-reveal-id="lov" data-bg="lov-modal-bg" data-dismissmodalclass='close-lov' data-lovname="职位查询" data-queryurl="lov/getJobPage.do" data-jsontype="job" data-defaultquery="true" data-th=["职务编号","职务名称"] data-td=["JOB_ID","JOB_NAME"] data-selectname=["职务编号","职务名称"] data-selectvalue=["JOB_ID","JOB_NAME"] data-choose=[".JOB_ID",".JOB_NAME"] data-recid=["#JOB_ID_Q","#JOB_NAME_Q"] value="···">
             <br style="clear:both"/>
