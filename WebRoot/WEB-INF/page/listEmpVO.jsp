@@ -40,7 +40,7 @@
      	    <th class="JOB_NAME" data-column="db">职位</th>
      	    <th class="DEPT_NAME" data-column="db">部门</th>
      	    <th class="ACTION" data-column="normal">操作</th> 
-     	    <th style="display:none" data-column="normal">&nbsp;</th>
+     	    <th style="display:none" data-column="hidden">&nbsp;</th>
      	  </tr>
      	  <tr>
      	    <td class="EMP_ID" data-column="db"></td>
@@ -56,7 +56,7 @@
      	      <i class="fa fa-trash-o delete pointer" data-crudtype="del" data-delurl="emp/delete.do" data-col="FULL_NAME" data-delmsg="是否要删除用户" data-delparam=["EMP_ID",".EMP_ID"]></i>
      	      <i class="fa fa-pencil fa-fw update pointer" data-reveal-id="uf" data-dismissmodalclass="close-update-frame" data-crudtype="pre-update" data-preupdateurl="emp/preUpdate.do" data-type="update" data-updateparam=["EMP_ID",".EMP_ID"]></i>
      	    </td>
-     	    <td style="display:none" data-column="normal">&nbsp;</td>
+     	    <td style="display:none" data-column="hidden">&nbsp;</td>
      	  </tr>
        </table>
      </div>

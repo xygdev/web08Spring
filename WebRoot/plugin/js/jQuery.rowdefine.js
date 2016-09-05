@@ -12,6 +12,8 @@
            2016.7.11   代码优化
            2016.7.12   新增插件配置说明 
            2016.8.27   代码参数优化
+           2016.9.2    优化代码，在初始化定义列的时候，用data-column是否为hidden
+                       来判定是否要将该列加入定义列的范围
 *********************************************************/
 
 (function($) {
@@ -62,15 +64,21 @@
             	$(options.setbutton).css('visibility','hidden');
             	show.empty();/****清空show <option>中的内容****/
             	hide.empty();/****清空hide <option>中的内容****/
-        		count=($(table+' th').length-1);/****获取总列数（排除最后一列的空列）****/
+        		//count=($(table+' th').length-1);/****获取总列数（排除最后一列的空列）****/
+            	count=$(table+' th').length;
              	for(i=0;i<count;i++){/****遍历标题列（除最后一列空列外）****/
              		if($(table+' th:eq('+i+')').css('display')!='none'){
         				/****如果标题列不隐藏，则标题名加入show <option>中****/
              			show.append('<option value='+$(table+' th:eq('+i+')').attr('class')+'>'+$(table+' th:eq('+i+')').text()+'</option>');
              	    }
              	    else{
-        				/****如果标题列隐藏，则标题名加入hide <option>中****/
-             	    	hide.append('<option value='+$(table+' th:eq('+i+')').attr('class')+'>'+$(table+' th:eq('+i+')').text()+'</option>');            	    	
+        				if($(table+' th:eq('+i+')').attr('data-column')=='hidden'){
+        					continue;
+        				}else{
+        					/****如果标题列隐藏，则标题名加入hide <option>中****/
+        					hide.append('<option value='+$(table+' th:eq('+i+')').attr('class')+'>'+$(table+' th:eq('+i+')').text()+'</option>');            	    	
+        				}   	
+             	    	//hide.append('<option value='+$(table+' th:eq('+i+')').attr('class')+'>'+$(table+' th:eq('+i+')').text()+'</option>');            	    	
              	    }
              	} 
         	}       	
