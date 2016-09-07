@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import xygdev.commons.entity.PlsqlRetValue;
 import xygdev.commons.page.PagePub;
-import xygdev.commons.springjdbc.DevTransactionPub;
+import xygdev.commons.springjdbc.DevJdbcSubProcess;
 
 import com.xinyiglass.springSample.dao.EmpVODao;
 import com.xinyiglass.springSample.entity.EmpVO;
@@ -27,7 +27,7 @@ public class EmpVOService {
 	public PlsqlRetValue insert(EmpVO e) throws Exception{
 		PlsqlRetValue ret=eDao.insert(e);
 		if(ret.getRetcode()!=0){
-			DevTransactionPub.setRollbackOnly();//该事务必须要回滚！
+			DevJdbcSubProcess.setRollbackOnly();//该事务必须要回滚！
 		}
 		return ret;
 	}
@@ -35,7 +35,7 @@ public class EmpVOService {
 	public PlsqlRetValue delete(Long empId) throws Exception{
 		PlsqlRetValue ret=eDao.delete(empId);
 		if(ret.getRetcode()!=0){
-			DevTransactionPub.setRollbackOnly();//该事务必须要回滚！
+			DevJdbcSubProcess.setRollbackOnly();//该事务必须要回滚！
 		}
 		return ret;
 	}
@@ -94,7 +94,7 @@ public class EmpVOService {
 		Thread.sleep(30000);*/
 		//如果返回值<>0那是必须要回滚的！
 		if(ret.getRetcode()!=0){
-			DevTransactionPub.setRollbackOnly();//该事务必须要回滚！
+			DevJdbcSubProcess.setRollbackOnly();//该事务必须要回滚！
 		}
 		//Assert.isTrue(lockRet.getRetcode()==0, "lock处理失败！信息："+lockRet.getErrbuf());
 		return ret;
