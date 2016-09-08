@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.socket.TextMessage;
 
 import xygdev.commons.entity.PlsqlRetValue;
+import xygdev.commons.util.TypeConvert;
 
 import com.xinyiglass.springSample.websocket.SystemWebSocketHandler;
 
@@ -56,12 +57,18 @@ public class AdminController {
             rs.setErrbuf("接收人或者消息都不允许为空！");
         }else{
             ArrayList<Long> userIdList=new ArrayList<Long>();
-            for(String userIdStr:req.getParameter("USER_IDS").split(",")){
-            	userIdList.add(Long.parseLong(userIdStr));
-                System.out.println("user_id:"+Long.parseLong(userIdStr));
+            if(!TypeConvert.isNullValue(req.getParameter("USER_IDS"))){
+                for(String userIdStr:req.getParameter("USER_IDS").split(",")){
+                	userIdList.add(Long.parseLong(userIdStr));
+                    System.out.println("user_id:"+Long.parseLong(userIdStr));
+                }
             }
             String message=req.getParameter("MESSAGE");
-            systemWebSocketHandler().sendMessageToUsers(userIdList, new TextMessage(message));
+            if(userIdList.size()>0){
+            	systemWebSocketHandler().sendMessageToUsers(userIdList, new TextMessage(message));
+            }else{//如果没指定用户，则全部发送！
+            	systemWebSocketHandler().sendMessageToUsers(new TextMessage(message));
+            }
             rs.setRetcode(0);
             rs.setErrbuf("发送成功！");
         }

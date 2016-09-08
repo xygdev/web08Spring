@@ -46,6 +46,8 @@ public class LoginController {
 		mv.setViewName("listEmpVO");
 		mv.addObject("USER_ID",USER_ID);
 		sess.setAttribute("USER_ID", Long.parseLong(USER_ID));//设定用户ID到会话
+		System.out.println("login sess:"+sess);
+		System.out.println("login sess uid:"+USER_ID);
 		return mv;
 	}
 

@@ -25,14 +25,13 @@ public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
 		if(request instanceof ServletServerHttpRequest){
 			ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
             HttpSession session = servletRequest.getServletRequest().getSession(false);
-            System.out.println("beforeHandshake,session id:"+session.getId());
+            System.out.println("beforeHandshake,session:"+session);
             if (session != null) {
+            	System.out.println("beforeHandshake,session user id:"+session.getAttribute("USER_ID"));
                 //使用USER_ID区分WebSocketHandler，以便定向发送消息
             	if(session.getAttribute("USER_ID")!=null){
             		Long userId = (Long) session.getAttribute("USER_ID");
                     attributes.put("USER_ID",userId);
-            	}else{
-            		return false;//如果用户不存在，则不用申请握手！
             	}
             }
 		}
