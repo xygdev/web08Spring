@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>消息发送管理器</title>
-<script type="text/javascript" src="/web08Spring/plugin/jQuery/jQuery-2.1.4.min.js"></script>	
+<script type="text/javascript" src="plugin/jQuery/jQuery-2.1.4.min.js"></script>	
 <script type="text/javascript">
 $(document).ready(function(){
   $("#btn").click(function(){

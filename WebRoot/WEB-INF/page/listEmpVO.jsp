@@ -14,7 +14,7 @@
 	<link rel="stylesheet" href="plugin/css/jquery-ui.min.css">
 	<link rel="stylesheet" type="text/css" href="plugin/css/style.css">
 	<script type="text/javascript" src="plugin/jQuery/jQuery-2.1.4.min.js"></script>	
-	<script src="http://192.168.88.123:8080/web08Spring/plugin/js/webSocket.js"></script>
+	<script src="plugin/js/webSocket.js"></script>
 	<script src="plugin/js/jquery-ui.min.js"></script>	
   </head> 
   <body>
