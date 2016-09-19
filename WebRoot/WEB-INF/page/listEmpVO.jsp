@@ -75,66 +75,20 @@
        </div>
        <div class="setting">
          <i id='refresh' class="fa fa-refresh pointer" data-pagetype='refresh' data-pageframe="table"></i>
-       </div>       
+       </div>    
        <div id="setting">
-         <div class="title">
-           <span>设置</span>
-           <a class="close-setting">&#215;</a>
-         </div>  
-         <div class="line"></div>
-         <div class="content">
-           <ul>
-             <li><a class="pointer" data-rowdefine="init" data-reveal-id="row-def" data-pageframe="row-def" data-table="#tb">定义列</a></li>
-             <li><a class="pointer">显示行数</a>
-               <ul>
-                 <li>
-                   <a class="set_page_size pointer" data-pagetype="setpagesize" data-pageframe="table">
-                   <i class="fa fa-dot-circle-o hidden" aria-hidden="true" data-value="5"></i>
-                   5</a>
-                 </li>
-                 <li>
-                   <a class="set_page_size pointer" data-pagetype="setpagesize" data-pageframe="table">
-                   <i class="fa fa-dot-circle-o" aria-hidden="true" data-value="10"></i>
-                   10</a>
-                 </li>
-                 <li>
-                   <a class="set_page_size pointer" data-pagetype="setpagesize" data-pageframe="table">
-                   <i class="fa fa-dot-circle-o hidden" aria-hidden="true" data-value="15"></i>
-                   15</a>
-                 </li>
-                 <li>
-                   <a class="set_page_size pointer" data-pagetype="setpagesize" data-pageframe="table">
-                   <i class="fa fa-dot-circle-o hidden" aria-hidden="true" data-value="25"></i>
-                   25</a>
-                 </li>
-                 <li>
-                   <a class="set_page_size pointer" data-pagetype="setpagesize" data-pageframe="table">
-                   <i class="fa fa-dot-circle-o hidden" aria-hidden="true" data-value="50"></i>
-                   50</a>
-                 </li> 
-               </ul>
-             </li>
-             <li><a class="pointer" data-ordertable="#tb" data-reveal-id="orderby">多维排序</a></li>
-             <li><a class="pointer" data-config="init" data-reveal-id="config">个人配置</a></li>
-           </ul>
-         </div>      
-       </div>
-       <div>
-         <div class="arrow_S margin">
-           <i id="last" class="fa fa-step-forward pointer" data-pagetype="lastpage" data-pageframe="table"></i>
-         </div>
-         <div class="arrow_L">
-           <i id="next" class="fa fa-chevron-circle-right pointer" data-pagetype="nextpage" data-pageframe="table"></i>
-         </div>
-         <div class="pageRow">
-       	   <span id="pageRow" data-type="row">1</span>
-         </div>
-         <div class="arrow_L">
-           <i id="previous" class="fa fa-chevron-circle-left pointer" data-pagetype="prevpage" data-pageframe="table"></i>
-         </div>
-         <div class="arrow_S">
-           <i id="first" class="fa fa-step-backward pointer" data-pagetype="firstpage" data-pageframe="table"></i>
-         </div>
+	     <!-- 设置菜单区域 start -->
+         <jsp:include page="setting.jsp" >
+			<jsp:param name="rdtable" value="#tb" />
+			<jsp:param name="odtable" value="#tb" />
+			<jsp:param name="pageframe" value="table" />
+		 </jsp:include>
+         <!-- 设置菜单区域 end -->
+		 <!-- 分页按钮区域 start -->
+         <jsp:include page="pageArrow.jsp" >
+			<jsp:param name="pageframe" value="table" />
+		 </jsp:include>
+         <!-- 分页按钮区域 end -->
          <input type="hidden" data-type="size" id="page_size" value="10"/>
          <input type="hidden" data-type="number" id="page_no" value="1"/>
          <input type="hidden" data-type="cond" value="HIRE_DATE_F=&HIRE_DATE_T="/>
