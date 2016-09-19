@@ -48,6 +48,5 @@
           <li><a class="pointer" data-config="init" data-reveal-id="config">个人配置</a></li>
          </ul>
        </div>      
-     </div>
   </body>
 </html>
