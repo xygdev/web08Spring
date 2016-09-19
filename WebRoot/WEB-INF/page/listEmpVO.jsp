@@ -84,6 +84,8 @@
 			<jsp:param name="pageframe" value="table" />
 		 </jsp:include>
          <!-- 设置菜单区域 end -->
+       </div>
+       <div>
 		 <!-- 分页按钮区域 start -->
          <jsp:include page="pageArrow.jsp" >
 			<jsp:param name="pageframe" value="table" />
