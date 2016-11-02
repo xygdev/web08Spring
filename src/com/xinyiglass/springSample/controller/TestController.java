@@ -1,6 +1,7 @@
 package com.xinyiglass.springSample.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.DecimalFormat;
 import java.util.Random;
 
@@ -30,6 +31,8 @@ public class TestController {
         req.setCharacterEncoding("utf-8");
 		res.setCharacterEncoding("utf-8");
 		res.setContentType("text/html;charset=utf-8");  
+		//http://blog.csdn.net/u010757785/article/details/51454217
+		res.setHeader("Access-Control-Allow-Origin", "*");
     } 
 	
 	//http://192.168.88.123:8080/web08Spring/test/test01.do
@@ -93,6 +96,38 @@ public class TestController {
 		sb.deleteCharAt(sb.lastIndexOf(","));
 		sb.append("]");
 		res.getWriter().print(sb.toString());
+	}
+	
+	@RequestMapping("/test04.do")
+	public String test04(){
+		return "testAjax04-jQueryAjax";
+	}
+	
+	@RequestMapping("/find.do")
+	public void find() throws Exception{
+		//if(1==1) throw new ServletException("some error");//test error!
+		String key=URLDecoder.decode(req.getParameter("key"),"UTF-8");
+		System.out.println("key:"+key);
+		if(key==null) return;
+		if(key.equals("小")){
+			res.getWriter().print("小学生作文,小学生,小米,小米2,小学生守则");
+		}else if(key.equals("小学")){
+			res.getWriter().print("小学生作文,小学生");
+		}else if(key.equals("岳")){
+			res.getWriter().print("岳飞,岳不群");
+		}else if(key.equals("X")){
+			res.getWriter().print("XX,XXXX00");
+		}
+	}
+	
+	@RequestMapping("/checkUser.do")
+	public void checkUser() throws Exception{
+		String user=req.getParameter("costName");
+		if(user!=null&user.equalsIgnoreCase("WX214492")){
+			res.getWriter().print("false");
+		}else{
+			res.getWriter().print("true");
+		}
 	}
 	
 }
